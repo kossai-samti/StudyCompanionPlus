@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New StudyMaterial{% endblock %}
+
+{% block body %}
+    <h1>Create new StudyMaterial</h1>
+
+    {{ include('study_material/_form.html.twig') }}
+
+    <a href="{{ path('app_study_material_index') }}">back to list</a>
+{% endblock %}

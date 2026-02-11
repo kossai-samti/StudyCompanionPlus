@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}StudyMaterial{% endblock %}
+
+{% block body %}
+    <h1>StudyMaterial</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ study_material.id }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ study_material.type }}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ study_material.content }}</td>
+            </tr>
+            <tr>
+                <th>Summary</th>
+                <td>{{ study_material.summary }}</td>
+            </tr>
+            <tr>
+                <th>Flashcards</th>
+                <td>{{ study_material.flashcards }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_study_material_index') }}">back to list</a>
+
+    <a href="{{ path('app_study_material_edit', {'id': study_material.id}) }}">edit</a>
+
+    {{ include('study_material/_delete_form.html.twig') }}
+{% endblock %}

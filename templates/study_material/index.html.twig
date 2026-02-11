@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}StudyMaterial index{% endblock %}
+
+{% block body %}
+    <h1>StudyMaterial index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Type</th>
+                <th>Content</th>
+                <th>Summary</th>
+                <th>Flashcards</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for study_material in study_materials %}
+            <tr>
+                <td>{{ study_material.id }}</td>
+                <td>{{ study_material.type }}</td>
+                <td>{{ study_material.content }}</td>
+                <td>{{ study_material.summary }}</td>
+                <td>{{ study_material.flashcards }}</td>
+                <td>
+                    <a href="{{ path('app_study_material_show', {'id': study_material.id}) }}">show</a>
+                    <a href="{{ path('app_study_material_edit', {'id': study_material.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_study_material_new') }}">Create new</a>
+{% endblock %}
