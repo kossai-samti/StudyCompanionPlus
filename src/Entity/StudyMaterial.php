@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\StudyMaterialRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: StudyMaterialRepository::class)]
 class StudyMaterial
@@ -15,6 +16,8 @@ class StudyMaterial
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "You must provide a type!")]
+
     private ?string $type = null;
 
     #[ORM\Column(length: 255)]

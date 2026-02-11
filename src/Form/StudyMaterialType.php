@@ -27,8 +27,9 @@ class StudyMaterialType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => StudyMaterial::class,
-        ]);
+    $resolver->setDefaults([
+        'data_class' => StudyMaterial::class,
+        'attr' => ['novalidate' => 'novalidate'] // This disables browser validation
+    ]);
     }
 }
