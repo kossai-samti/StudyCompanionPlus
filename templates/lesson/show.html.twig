@@ -1,0 +1,38 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Lesson Details{% endblock %}
+
+{% block content %}
+  <article class="page-card">
+    <h1 style="margin-top:0">{{ lesson.title }}</h1>
+    <p style="margin:8px 0"><strong>Subject:</strong> {{ lesson.subject }} | <strong>Difficulty:</strong> {{ lesson.difficulty }}</p>
+
+    <nav style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+      <a href="#summary" style="text-decoration:none;background:#6e47de;color:#fff;padding:9px 12px;border-radius:10px">Summary</a>
+      <a href="#flashcards" style="text-decoration:none;background:#efe9ff;color:#3f2f75;padding:9px 12px;border-radius:10px;border:1px solid #d4caf6">Flashcards</a>
+    </nav>
+
+    <section id="summary" class="page-card" style="margin-top:14px;background:#fcfbff">
+      <h3 style="margin-top:0">Summary</h3>
+      <p>AI-generated key points for this lesson appear here with concise explanations and structure.</p>
+      <ul style="margin:10px 0;padding-left:18px">
+        <li>Main concept explained in simple terms.</li>
+        <li>Important formulas, definitions, and examples.</li>
+        <li>Quick recap to prepare for assessment.</li>
+      </ul>
+    </section>
+
+    <section id="flashcards" class="page-card" style="margin-top:12px;background:#fffdf7">
+      <h3 style="margin-top:0">Flashcards</h3>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
+        <div style="padding:12px;border-radius:12px;background:#fff;border:1px solid #efe1a8"><strong>Q:</strong> What is the core principle?</div>
+        <div style="padding:12px;border-radius:12px;background:#fff;border:1px solid #efe1a8"><strong>Q:</strong> Which example applies it?</div>
+        <div style="padding:12px;border-radius:12px;background:#fff;border:1px solid #efe1a8"><strong>Q:</strong> When do we use this method?</div>
+      </div>
+    </section>
+
+    <p style="margin:16px 0 0">
+      <a href="{{ path('quiz_index') }}" style="display:inline-block;text-decoration:none;background:#ff6b61;color:#fff;padding:11px 14px;border-radius:10px;font-weight:700">Take Quiz</a>
+    </p>
+  </article>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'back/base.html.twig' %}
+{% set panel = 'admin' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <style>
+    @media (max-width: 900px){
+      .admin-stats{grid-template-columns:1fr!important}
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <section class="panel">
+    <h1 style="margin:0 0 6px;color:#ffd86b">Administrator Dashboard</h1>
+    <p style="margin:0;color:#bdd0ed">Welcome, {{ user.name }}. Manage users, groups, lessons, and quizzes from one place.</p>
+  </section>
+
+  <section class="grid admin-stats" style="grid-template-columns:repeat(3,1fr);margin-top:12px">
+    <article class="panel"><small style="color:#adc3e7">Total users</small><h2 style="margin:6px 0 0">320</h2></article>
+    <article class="panel"><small style="color:#adc3e7">Total lessons</small><h2 style="margin:6px 0 0">124</h2></article>
+    <article class="panel"><small style="color:#adc3e7">Total quizzes</small><h2 style="margin:6px 0 0">278</h2></article>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <h3 style="margin-top:0">Quick Actions</h3>
+    <a href="{{ path('admin_users') }}" class="action">Manage Users</a>
+    <a href="{{ path('admin_groups') }}" class="action">Manage Groups</a>
+    <a href="{{ path('admin_lessons') }}" class="action">Manage Lessons</a>
+    <a href="{{ path('admin_quizzes') }}" class="action">Manage Quizzes</a>
+  </section>
+{% endblock %}

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question
@@ -21,9 +22,11 @@ class Question
     private ?Quiz $quiz = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'Question text cannot be blank')]
     private ?string $text = null;
 
     #[ORM\Column]
+    #[Assert\Count(min: 2, minMessage: 'Provide at least {{ limit }} options')]
     private array $options = [];
 
     /**
@@ -33,6 +36,7 @@ class Question
     private Collection $studentAnswers;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Correct answer required')]
     private ?string $correct_answer = null;
 
     public function __construct()

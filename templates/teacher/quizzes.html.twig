@@ -1,0 +1,25 @@
+{% extends 'back/base.html.twig' %}
+{% set panel = 'teacher' %}
+
+{% block title %}Teacher | Quizzes{% endblock %}
+
+{% block content %}
+  <section class="panel">
+    <h1 style="margin:0 0 8px">Quiz Management</h1>
+    <p style="margin:0;color:#bdd0ed">Create, refine, and monitor AI-generated quizzes and student outcomes.</p>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <a href="{{ path('quiz_new') }}" class="action gold">Create Quiz</a>
+    <a href="{{ path('quiz_index') }}" class="action">View Student Quiz Flow</a>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <h3 style="margin-top:0">Teacher Monitoring & Feedback</h3>
+    <ul style="margin:0;padding-left:18px;color:#d5e5ff">
+      <li>Track each student's quiz results.</li>
+      <li>Review weak topics identified by the system.</li>
+      <li>Store qualitative comments on incorrect answers via TeacherComment.</li>
+    </ul>
+  </section>
+{% endblock %}

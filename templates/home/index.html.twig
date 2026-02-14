@@ -1,0 +1,83 @@
+{% extends 'front/landing_base.html.twig' %}
+
+{% block title %}StudyCompanionPlus | Landing{% endblock %}
+
+{% block content %}
+  <section class="container hero">
+    <div>
+      <h1 class="headline">Study smarter. Play harder. Repeat.</h1>
+      <p class="lead">AI-powered study materials, adaptive quizzes, and live progress insights for every learner.</p>
+      <p><a class="btn btn-yellow" href="{{ path('app_login') }}">Start Free</a></p>
+    </div>
+    <div>
+      <article class="preview-card">
+        <h3>AI Product Preview</h3>
+        <p>Auto-generated summaries, flashcards, quiz flows, and weak-topic detection in one place.</p>
+        <div class="feature" style="margin-top:10px">
+          <strong>Lesson: Algebra Basics</strong>
+          <p style="margin:8px 0 0;color:#4b5475">Summary ready, 12 flashcards generated, quiz confidence 83%.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="stat-bar">
+      <div class="stat"><strong>14,200+</strong><br>Active students</div>
+      <div class="stat"><strong>93%</strong><br>Success rate</div>
+      <div class="stat"><strong>1,850</strong><br>Lessons generated</div>
+      <div class="stat"><strong>4.8/5</strong><br>Teacher rating</div>
+    </div>
+  </section>
+
+  <section class="container section">
+    <h2>Features</h2>
+    <div class="cards-3">
+      <article class="feature"><div class="icon">🧠</div><h3>AI Summaries</h3><p>Concise, structured notes from uploaded lesson content.</p></article>
+      <article class="feature"><div class="icon">🗂️</div><h3>Smart Flashcards</h3><p>Auto-generated cards to reinforce key concepts quickly.</p></article>
+      <article class="feature"><div class="icon">📈</div><h3>Performance Tracking</h3><p>Identify weak topics and mastery progression over time.</p></article>
+    </div>
+  </section>
+
+  <section class="container section">
+    <div class="how">
+      <h2>How It Works</h2>
+      <div class="cards-3">
+        <article class="step"><div class="step-num">1</div><h3>Upload Lesson</h3><p>Teacher uploads lesson content to the platform.</p></article>
+        <article class="step"><div class="step-num">2</div><h3>Generate With AI</h3><p>AI creates summary, flashcards, and quiz questions.</p></article>
+        <article class="step"><div class="step-num">3</div><h3>Practice & Improve</h3><p>Students study, take quiz, and review performance reports.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section">
+    <h2>Testimonials</h2>
+    <div class="cards-3">
+      <article class="testimonial"><p>"The quiz feedback made it easy to target weak areas before exams."</p><strong>- Sam, Student</strong></article>
+      <article class="testimonial"><p>"I save hours every week with AI-generated summaries and flashcards."</p><strong>- Jane, Teacher</strong></article>
+      <article class="testimonial"><p>"The role-based dashboards are clear and easy for everyone to use."</p><strong>- Admin Team</strong></article>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="final-cta">
+      <h2>Ready to level up learning?</h2>
+      <p>Start building smarter study workflows today.</p>
+      <a class="btn btn-yellow" href="{{ path('app_login') }}">Get Started Free</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div>
+        <strong>StudyCompanionPlus</strong>
+        <p style="margin:8px 0 0">AI-enhanced learning for students, teachers, and admins.</p>
+      </div>
+      <div>
+        <a href="{{ path('home') }}">Home</a>
+        <a href="{{ path('app_login') }}">Sign In</a>
+        <a href="{{ path('app_login') }}">Start Free</a>
+      </div>
+    </div>
+  </footer>
+{% endblock %}

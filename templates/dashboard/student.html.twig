@@ -1,0 +1,66 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <style>
+    @media (max-width: 900px){
+      .student-stats{grid-template-columns:repeat(2,1fr)!important}
+      .student-main{grid-template-columns:1fr!important}
+    }
+    @media (max-width: 560px){
+      .student-stats{grid-template-columns:1fr!important}
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <header class="page-card" style="display:flex;justify-content:space-between;gap:14px;align-items:center">
+    <div>
+      <h1 style="margin:0 0 6px">Welcome, {{ user.name }}</h1>
+      <span style="display:inline-block;background:linear-gradient(120deg,#7a55ea,#9f82ff);color:#fff;padding:6px 10px;border-radius:999px;font-weight:700">Grade 10</span>
+    </div>
+    <p style="margin:0;color:#604ca0">Your AI-powered learning space is ready.</p>
+  </header>
+
+  <section class="grid student-stats" style="grid-template-columns:repeat(4,1fr);margin-top:14px">
+    <article class="page-card"><small>Total lessons</small><h2 style="margin:4px 0 0">12</h2></article>
+    <article class="page-card"><small>Total quizzes</small><h2 style="margin:4px 0 0">9</h2></article>
+    <article class="page-card"><small>Average score</small><h2 style="margin:4px 0 0">84%</h2></article>
+    <article class="page-card"><small>Mastered topics</small><h2 style="margin:4px 0 0">6</h2></article>
+  </section>
+
+  <section class="grid student-main" style="grid-template-columns:1.45fr .85fr;margin-top:14px">
+    <div class="grid">
+      <article class="page-card">
+        <h3 style="margin-top:0">Available Quizzes</h3>
+        <a href="{{ path('quiz_index') }}" style="display:block;text-decoration:none;background:#f8f5ff;border:1px solid #d7cff9;padding:12px;border-radius:12px">Mathematics Fundamentals Quiz</a>
+        <a href="{{ path('quiz_index') }}" style="display:block;text-decoration:none;background:#f8f5ff;border:1px solid #d7cff9;padding:12px;border-radius:12px;margin-top:8px">Science Concepts Quiz</a>
+      </article>
+      <article class="page-card">
+        <h3 style="margin-top:0">Recent Lessons</h3>
+        <p style="margin:8px 0">Algebra Basics</p>
+        <p style="margin:8px 0">Photosynthesis Essentials</p>
+      </article>
+    </div>
+
+    <aside class="grid">
+      <article style="background:linear-gradient(130deg,#ffd965,#ffc847);border-radius:16px;padding:16px;color:#2f2200">
+        <h3 style="margin-top:0">AI Recommendations</h3>
+        <p style="margin:0">Focus on fractions and speed practice for higher mastery in math.</p>
+      </article>
+      <article class="page-card">
+        <h3 style="margin-top:0">Progress Overview</h3>
+        <div style="height:10px;background:#ece6ff;border-radius:999px;overflow:hidden">
+          <div style="height:100%;width:64%;background:linear-gradient(90deg,#6d42dc,#9f80ff)"></div>
+        </div>
+        <ul style="padding-left:16px;margin:10px 0 0">
+          <li>Completed Algebra quiz (+6%)</li>
+          <li>Reviewed 12 flashcards (+3%)</li>
+          <li>Weak topic detected: equations</li>
+        </ul>
+      </article>
+    </aside>
+  </section>
+{% endblock %}

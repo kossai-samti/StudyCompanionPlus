@@ -1,0 +1,16 @@
+{% extends 'back/base.html.twig' %}
+{% set panel = 'admin' %}
+
+{% block title %}Admin | Quizzes{% endblock %}
+
+{% block content %}
+  <section class="panel">
+    <h1 style="margin:0 0 8px">Quizzes</h1>
+    <p style="margin:0;color:#bdd0ed">Monitor quiz content quality and deployment across lessons.</p>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <a href="{{ path('quiz_index') }}" class="action">View Student Quizzes</a>
+    <a href="{{ path('quiz_new') }}" class="action gold">Add Quiz</a>
+  </section>
+{% endblock %}

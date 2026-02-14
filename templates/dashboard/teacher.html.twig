@@ -1,0 +1,65 @@
+{% extends 'back/base.html.twig' %}
+{% set panel = 'teacher' %}
+
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <style>
+    @media (max-width: 900px){
+      .teacher-stats{grid-template-columns:1fr!important}
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <section class="panel" style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <div>
+      <h1 style="margin:0 0 6px;color:#ffd86b">Teacher Dashboard</h1>
+      <p style="margin:0;color:#bdd0ed">Welcome, {{ user.name }}. Monitor student performance and manage learning content.</p>
+    </div>
+    <a href="{{ path('teacher_students') }}" class="action gold">Add Student</a>
+  </section>
+
+  <section class="grid teacher-stats" style="grid-template-columns:repeat(3,1fr);margin-top:12px">
+    <article class="panel"><small style="color:#adc3e7">My students</small><h2 style="margin:6px 0 0">42</h2></article>
+    <article class="panel"><small style="color:#adc3e7">Groups count</small><h2 style="margin:6px 0 0">8</h2></article>
+    <article class="panel"><small style="color:#adc3e7">Average score</small><h2 style="margin:6px 0 0">81%</h2></article>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <h3 style="margin-top:0">Quick Actions</h3>
+    <a href="{{ path('teacher_students') }}" class="action">Manage Students</a>
+    <a href="{{ path('teacher_groups') }}" class="action">Manage Groups</a>
+    <a href="{{ path('teacher_lessons') }}" class="action">Manage Lessons</a>
+    <a href="{{ path('teacher_quizzes') }}" class="action">Manage Quizzes</a>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <h3 style="margin-top:0">Student Performance Overview</h3>
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Student</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Progress</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Score</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Mastery</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">Sam Student</td>
+          <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)"><div style="height:9px;background:#1a3e73;border-radius:999px"><div style="height:100%;width:72%;background:#ffd86b;border-radius:999px"></div></div></td>
+          <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">85%</td>
+          <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">Intermediate</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 4px">Nina Learner</td>
+          <td style="padding:10px 4px"><div style="height:9px;background:#1a3e73;border-radius:999px"><div style="height:100%;width:91%;background:#ffd86b;border-radius:999px"></div></div></td>
+          <td style="padding:10px 4px">93%</td>
+          <td style="padding:10px 4px">Mastered</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+{% endblock %}

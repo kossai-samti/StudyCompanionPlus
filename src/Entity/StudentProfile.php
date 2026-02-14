@@ -6,6 +6,7 @@ use App\Repository\StudentProfileRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: StudentProfileRepository::class)]
 class StudentProfile
@@ -16,9 +17,11 @@ class StudentProfile
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: 'Grade is required')]
     private ?string $grade = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Assert\NotNull(message: 'Student must be linked to a User')]
     private ?User $user = null;
 
     #[ORM\ManyToOne]

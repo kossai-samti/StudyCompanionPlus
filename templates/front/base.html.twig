@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block body_class %}student-shell{% endblock %}
+
+{% block stylesheets %}
+  <style>
+    :root{
+      --violet-900:#24134f;
+      --violet-700:#5d38cc;
+      --violet-500:#7d58ef;
+      --violet-100:#f2edff;
+      --ink:#271d3d;
+      --sun:#ffd23c;
+      --white:#ffffff;
+      --line:#d7cff9;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      color:var(--ink);
+      font-family:"Trebuchet MS","Segoe UI","Verdana",sans-serif;
+      background:radial-gradient(circle at 12% 8%, #f6f2ff 0%, #efe9ff 45%, #f9f7ff 100%);
+    }
+    a{color:inherit}
+    .student-nav{
+      position:sticky;
+      top:0;
+      z-index:20;
+      margin:14px;
+      padding:12px 18px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.45);
+      background:rgba(85,55,174,.32);
+      backdrop-filter:blur(14px);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      color:#f8f4ff;
+    }
+    .brand{
+      font-weight:800;
+      letter-spacing:.2px;
+      text-decoration:none;
+    }
+    .nav-links{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .nav-links a{
+      text-decoration:none;
+      color:#efe9ff;
+      padding:8px 12px;
+      border-radius:10px;
+      font-size:14px;
+    }
+    .nav-links a.active{
+      background:var(--sun);
+      color:#2f2000;
+      font-weight:700;
+    }
+    .user-menu{
+      background:rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.35);
+      border-radius:10px;
+      padding:8px 10px;
+      color:#fff;
+      font-size:13px;
+    }
+    .user-menu summary{cursor:pointer;list-style:none}
+    .user-menu summary::-webkit-details-marker{display:none}
+    .user-menu a{
+      display:block;
+      margin-top:8px;
+      text-decoration:none;
+      color:#fff;
+      font-weight:700;
+    }
+    .container{max-width:1160px;margin:0 auto;padding:0 18px 32px}
+    .page-card{
+      background:var(--white);
+      border:1px solid var(--line);
+      border-radius:16px;
+      box-shadow:0 10px 24px rgba(40,24,90,.08);
+      padding:18px;
+    }
+    .grid{display:grid;gap:14px}
+    @media (max-width: 860px){
+      .student-nav{flex-direction:column;align-items:flex-start}
+      .container{padding:0 14px 28px}
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+  {% set route = app.request.attributes.get('_route') %}
+  {% set user = app.session.get('demo_user')|default({'name': 'Student'}) %}
+
+  <nav class="student-nav">
+    <a href="{{ path('student_dashboard') }}" class="brand">StudyCompanionPlus</a>
+    <div class="nav-links">
+      <a href="{{ path('student_dashboard') }}" class="{{ route == 'student_dashboard' ? 'active' : '' }}">Dashboard</a>
+      <a href="{{ path('lesson_index') }}" class="{{ route starts with 'lesson_' ? 'active' : '' }}">Lessons</a>
+      <a href="{{ path('quiz_index') }}" class="{{ route starts with 'quiz_' ? 'active' : '' }}">Quizzes</a>
+      <a href="{{ path('student_performance') }}" class="{{ route == 'student_performance' ? 'active' : '' }}">Performance</a>
+    </div>
+    <details class="user-menu">
+      <summary>{{ user.name|default('Student') }}</summary>
+      <a href="{{ path('app_logout') }}">Logout</a>
+    </details>
+  </nav>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+{% endblock %}

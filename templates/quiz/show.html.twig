@@ -1,0 +1,46 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Quiz #{{ quiz.id }}{% endblock %}
+
+{% block content %}
+  <p style="margin:0 0 10px"><a href="{{ path('quiz_index') }}" style="text-decoration:none;color:#6b44db;font-weight:700">← Back to quizzes</a></p>
+
+  <article class="page-card" style="max-width:760px;margin:0 auto">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
+      <strong>Question 1 of 5</strong>
+      <span style="color:#695c99">Lesson: {{ quiz.lesson.title }}</span>
+    </div>
+
+    <div style="margin-top:10px;height:10px;background:#ece6ff;border-radius:999px;overflow:hidden">
+      <div style="height:100%;width:20%;background:linear-gradient(90deg,#6d42dc,#9f80ff)"></div>
+    </div>
+
+    <h2 style="margin:16px 0 10px">Which option best describes the main concept from this lesson?</h2>
+
+    <form method="post">
+      <label style="display:block;background:#faf8ff;border:1px solid #ddd2ff;border-radius:12px;padding:11px;margin-bottom:8px">
+        <input type="radio" name="answer" value="a"> Option A
+      </label>
+      <label style="display:block;background:#faf8ff;border:1px solid #ddd2ff;border-radius:12px;padding:11px;margin-bottom:8px">
+        <input type="radio" name="answer" value="b"> Option B
+      </label>
+      <label style="display:block;background:#faf8ff;border:1px solid #ddd2ff;border-radius:12px;padding:11px;margin-bottom:8px">
+        <input type="radio" name="answer" value="c"> Option C
+      </label>
+      <label style="display:block;background:#faf8ff;border:1px solid #ddd2ff;border-radius:12px;padding:11px;margin-bottom:8px">
+        <input type="radio" name="answer" value="d"> Option D
+      </label>
+      <button type="button" style="margin-top:10px;background:#ff6b61;color:#fff;border:none;border-radius:10px;padding:11px 14px;font-weight:700">Next</button>
+    </form>
+  </article>
+
+  <section class="page-card" style="margin-top:14px">
+    <h3 style="margin-top:0">After Submission</h3>
+    <ul style="margin:0;padding-left:18px">
+      <li>Answers are evaluated automatically.</li>
+      <li>A PerformanceReport is generated.</li>
+      <li>Weak topics are identified.</li>
+      <li>Mastery status is updated.</li>
+    </ul>
+  </section>
+{% endblock %}

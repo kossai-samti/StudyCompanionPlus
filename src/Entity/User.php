@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
@@ -14,15 +15,22 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Name is required')]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Email is required')]
+    #[Assert\Email(message: 'Enter a valid email')]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Password is required')]
+    #[Assert\Length(min: 6, minMessage: 'Password must be at least {{ limit }} characters')]
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: 'Role is required')]
+    #[Assert\Choice(choices: ['student','teacher','admin'], message: 'Choose a valid role')]
     private ?string $role = null;
 
     #[ORM\ManyToOne(inversedBy: 'user')]

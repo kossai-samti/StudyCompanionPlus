@@ -6,6 +6,7 @@ use App\Repository\QuizRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: QuizRepository::class)]
 class Quiz
@@ -17,9 +18,12 @@ class Quiz
 
     #[ORM\ManyToOne(inversedBy: 'quizzes')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Quiz must belong to a lesson')]
     private ?Lesson $lesson = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Difficulty is required')]
+    #[Assert\Choice(choices: ['easy','medium','hard'], message: 'Choose a valid difficulty.')]
     private ?string $difficulty = null;
 
     /**

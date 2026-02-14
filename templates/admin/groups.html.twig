@@ -1,0 +1,17 @@
+{% extends 'back/base.html.twig' %}
+{% set panel = 'admin' %}
+
+{% block title %}Admin | Groups{% endblock %}
+
+{% block content %}
+  <section class="panel">
+    <h1 style="margin:0 0 8px">Groups</h1>
+    <p style="margin:0;color:#bdd0ed">Manage all educational groups and memberships.</p>
+  </section>
+
+  <section class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px">
+    <article class="panel"><h3 style="margin-top:0">Grade 9</h3><p>45 users</p></article>
+    <article class="panel"><h3 style="margin-top:0">Grade 10</h3><p>53 users</p></article>
+    <article class="panel"><h3 style="margin-top:0">Teachers</h3><p>18 users</p></article>
+  </section>
+{% endblock %}

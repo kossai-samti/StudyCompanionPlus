@@ -1,0 +1,38 @@
+{% extends 'back/base.html.twig' %}
+{% set panel = 'teacher' %}
+
+{% block title %}Teacher | Students{% endblock %}
+
+{% block content %}
+  <section class="panel">
+    <h1 style="margin:0 0 8px">Students</h1>
+    <p style="margin:0;color:#bdd0ed">Track quiz results, weak topics, and feedback notes for each student.</p>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Student</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Latest score</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Weak topics</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Teacher comment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">Sam Student</td>
+          <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">85%</td>
+          <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">Equations</td>
+          <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">Review solving steps before next quiz.</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 4px">Nina Learner</td>
+          <td style="padding:10px 4px">92%</td>
+          <td style="padding:10px 4px">None</td>
+          <td style="padding:10px 4px">Great progress in recent attempts.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+{% endblock %}

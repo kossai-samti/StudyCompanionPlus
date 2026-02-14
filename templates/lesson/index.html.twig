@@ -1,0 +1,29 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Student Lessons{% endblock %}
+
+{% block content %}
+  <header class="page-card" style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+    <div>
+      <h1 style="margin:0">Lessons</h1>
+      <p style="margin:6px 0 0;color:#5e5091">Review all available lessons and open details to study.</p>
+    </div>
+    <a href="{{ path('lesson_new') }}" style="text-decoration:none;background:#6c45db;color:#fff;padding:10px 12px;border-radius:10px;font-weight:700">Create Lesson</a>
+  </header>
+
+  <section class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:14px">
+    {% for l in lessons %}
+      <article class="page-card">
+        <h3 style="margin-top:0">{{ l.title }}</h3>
+        <p style="margin:8px 0"><strong>Subject:</strong> {{ l.subject }}</p>
+        <p style="margin:8px 0"><strong>Difficulty:</strong> {{ l.difficulty }}</p>
+        {% if l.difficulty == 'easy' %}
+          <span style="display:inline-block;background:#ecfff0;border:1px solid #bfeccc;color:#175a2d;padding:5px 8px;border-radius:999px;font-size:12px">Mastery badge</span>
+        {% endif %}
+        <p style="margin:14px 0 0"><a href="{{ path('lesson_show', {'id': l.id}) }}" style="text-decoration:none;color:#6b44db;font-weight:700">Open Lesson</a></p>
+      </article>
+    {% else %}
+      <article class="page-card"><p style="margin:0">No lessons yet.</p></article>
+    {% endfor %}
+  </section>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Student Quizzes{% endblock %}
+
+{% block content %}
+  <header class="page-card" style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+    <div>
+      <h1 style="margin:0">Quizzes</h1>
+      <p style="margin:6px 0 0;color:#5e5091">Choose a quiz and continue your learning path.</p>
+    </div>
+    <a href="{{ path('quiz_new') }}" style="text-decoration:none;background:#6c45db;color:#fff;padding:10px 12px;border-radius:10px;font-weight:700">Create Quiz</a>
+  </header>
+
+  <section class="grid" style="margin-top:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+    {% for q in quizzes %}
+      <article class="page-card">
+        <h3 style="margin-top:0">Quiz #{{ q.id }}</h3>
+        <p><strong>Difficulty:</strong> {{ q.difficulty }}</p>
+        <p style="margin:0"><a href="{{ path('quiz_show', {'id': q.id}) }}" style="text-decoration:none;color:#6b44db;font-weight:700">Start Quiz</a></p>
+      </article>
+    {% else %}
+      <article class="page-card"><p style="margin:0">No quizzes yet.</p></article>
+    {% endfor %}
+  </section>
+{% endblock %}

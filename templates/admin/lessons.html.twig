@@ -1,0 +1,16 @@
+{% extends 'back/base.html.twig' %}
+{% set panel = 'admin' %}
+
+{% block title %}Admin | Lessons{% endblock %}
+
+{% block content %}
+  <section class="panel">
+    <h1 style="margin:0 0 8px">Lessons</h1>
+    <p style="margin:0;color:#bdd0ed">Platform-wide lesson monitoring and moderation.</p>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <a href="{{ path('lesson_index') }}" class="action">View Student Lessons</a>
+    <a href="{{ path('lesson_new') }}" class="action gold">Add Lesson</a>
+  </section>
+{% endblock %}

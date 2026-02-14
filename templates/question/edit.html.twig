@@ -1,0 +1,9 @@
+{% extends 'front/base.html.twig' %}
+
+{% block content %}
+  <h2>Edit Question</h2>
+  {{ form_start(form) }}
+  {{ form_widget(form) }}
+  <button type="submit" style="margin-top:8px">Update</button>
+  {{ form_end(form) }}
+{% endblock %}

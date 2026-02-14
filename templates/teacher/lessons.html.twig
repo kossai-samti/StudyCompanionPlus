@@ -1,0 +1,22 @@
+{% extends 'back/base.html.twig' %}
+{% set panel = 'teacher' %}
+
+{% block title %}Teacher | Lessons{% endblock %}
+
+{% block content %}
+  <section class="panel">
+    <h1 style="margin:0 0 8px">Lesson Management</h1>
+    <p style="margin:0;color:#bdd0ed">Upload lessons, send content to AI, and generate summary, flashcards, and quizzes.</p>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <a href="{{ path('lesson_new') }}" class="action gold">Create Lesson</a>
+    <a href="{{ path('lesson_index') }}" class="action">View Student Lesson Cards</a>
+  </section>
+
+  <section class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px">
+    <article class="panel"><h3 style="margin-top:0">AI Summary</h3><p>Generated from uploaded lesson content.</p></article>
+    <article class="panel"><h3 style="margin-top:0">Flashcards</h3><p>Editable cards for rapid review sessions.</p></article>
+    <article class="panel"><h3 style="margin-top:0">Quiz Questions</h3><p>Adjust options and refine difficulty levels.</p></article>
+  </section>
+{% endblock %}

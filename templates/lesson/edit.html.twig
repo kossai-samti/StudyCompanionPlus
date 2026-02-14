@@ -1,0 +1,16 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Edit Lesson{% endblock %}
+
+{% block content %}
+  <section class="page-card" style="max-width:760px;margin:0 auto">
+    <h1 style="margin-top:0">Edit Lesson</h1>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <p style="margin:12px 0 0">
+      <button type="submit" style="background:#6c45db;color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700">Update</button>
+      <a href="{{ path('lesson_index') }}" style="margin-left:8px;color:#6b44db;text-decoration:none">Back</a>
+    </p>
+    {{ form_end(form) }}
+  </section>
+{% endblock %}

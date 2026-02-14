@@ -1,0 +1,13 @@
+{% extends 'front/base.html.twig' %}
+
+{% block content %}
+  <h2>Questions</h2>
+  <p><a href="{{ path('question_new') }}">Create Question</a></p>
+  <ul>
+    {% for q in questions %}
+      <li><a href="{{ path('question_show', {'id': q.id}) }}">{{ q.text|slice(0,80) }}</a></li>
+    {% else %}
+      <li>No questions yet</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Student Performance{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <style>
+    @media (max-width: 900px){
+      .performance-grid{grid-template-columns:1fr!important}
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <section class="page-card">
+    <h1 style="margin-top:0">Performance</h1>
+    <p style="color:#5f5392">Track quiz scores, mastery level, weak topics, and progress history.</p>
+  </section>
+
+  <section class="grid performance-grid" style="grid-template-columns:1.2fr .8fr;margin-top:14px">
+    <article class="page-card">
+      <h3 style="margin-top:0">Quiz Scores by Lesson</h3>
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr>
+            <th style="text-align:left;border-bottom:1px solid #d9cffb;padding:8px 4px">Lesson</th>
+            <th style="text-align:left;border-bottom:1px solid #d9cffb;padding:8px 4px">Score</th>
+            <th style="text-align:left;border-bottom:1px solid #d9cffb;padding:8px 4px">Mastery</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:8px 4px;border-bottom:1px solid #eee8ff">Algebra Basics</td><td style="padding:8px 4px;border-bottom:1px solid #eee8ff">88%</td><td style="padding:8px 4px;border-bottom:1px solid #eee8ff">Intermediate</td></tr>
+          <tr><td style="padding:8px 4px;border-bottom:1px solid #eee8ff">Biology Intro</td><td style="padding:8px 4px;border-bottom:1px solid #eee8ff">79%</td><td style="padding:8px 4px;border-bottom:1px solid #eee8ff">Beginner</td></tr>
+          <tr><td style="padding:8px 4px">Geometry</td><td style="padding:8px 4px">94%</td><td style="padding:8px 4px">Mastered</td></tr>
+        </tbody>
+      </table>
+    </article>
+
+    <aside class="grid">
+      <article class="page-card">
+        <h3 style="margin-top:0">Weak Topics</h3>
+        <ul style="margin:0;padding-left:18px">
+          <li>Linear equation simplification</li>
+          <li>Scientific term recall</li>
+        </ul>
+      </article>
+      <article class="page-card">
+        <h3 style="margin-top:0">Historical Trend</h3>
+        <div style="height:10px;background:#ece6ff;border-radius:999px;overflow:hidden;margin-bottom:8px"><div style="height:100%;width:56%;background:#8d6af6"></div></div>
+        <div style="height:10px;background:#ece6ff;border-radius:999px;overflow:hidden;margin-bottom:8px"><div style="height:100%;width:68%;background:#7f56ef"></div></div>
+        <div style="height:10px;background:#ece6ff;border-radius:999px;overflow:hidden"><div style="height:100%;width:84%;background:#6e44df"></div></div>
+      </article>
+    </aside>
+  </section>
+{% endblock %}

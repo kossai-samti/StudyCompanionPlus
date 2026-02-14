@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}StudyCompanionPlus | Sign In{% endblock %}
+
+{% block stylesheets %}
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      color:#fff;
+      font-family:"Trebuchet MS","Segoe UI","Verdana",sans-serif;
+      background:linear-gradient(135deg,#6f39d7 0%,#ff6c61 100%);
+      position:relative;
+    }
+    .blur{
+      position:absolute;
+      border-radius:50%;
+      filter:blur(48px);
+      opacity:.5;
+      pointer-events:none;
+    }
+    .blur.a{width:260px;height:260px;background:#ffd86b;top:-40px;left:-20px}
+    .blur.b{width:220px;height:220px;background:#ffffff;bottom:-60px;right:-30px;opacity:.28}
+    .wrap{width:min(92vw,420px);position:relative;z-index:2}
+    .brand{text-align:center;margin-bottom:14px}
+    .brand h1{margin:0;font-size:30px}
+    .brand p{margin:4px 0 0;color:#f8e9ff}
+    .card{
+      background:#fff;
+      color:#1e1e2e;
+      border-radius:16px;
+      padding:22px;
+      box-shadow:0 16px 40px rgba(19,11,36,.32);
+    }
+    label{display:block;font-weight:700;font-size:13px;margin-bottom:5px}
+    input{
+      width:100%;
+      padding:11px;
+      border-radius:10px;
+      border:1px solid #d8ddf3;
+      margin-bottom:12px;
+      font-size:14px;
+    }
+    .signin{
+      width:100%;
+      border:none;
+      border-radius:10px;
+      padding:12px;
+      font-weight:800;
+      background:#ffd23c;
+      color:#2f2300;
+      cursor:pointer;
+    }
+    .quick{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+    }
+    .quick a{
+      text-decoration:none;
+      text-align:center;
+      background:#f4f6ff;
+      border:1px solid #dde2f8;
+      border-radius:10px;
+      padding:9px 6px;
+      color:#1f2d56;
+      font-weight:700;
+      font-size:13px;
+    }
+    .note{font-size:12px;color:#5d6180;margin-top:10px;text-align:center}
+  </style>
+{% endblock %}
+
+{% block body %}
+  <div class="blur a"></div>
+  <div class="blur b"></div>
+
+  <div class="wrap">
+    <div class="brand">
+      <h1>StudyCompanionPlus</h1>
+      <p>Learn with AI. Track progress. Improve faster.</p>
+    </div>
+
+    <div class="card">
+      <form method="post">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required>
+        <button class="signin" type="submit">Sign In</button>
+      </form>
+
+      <div class="quick">
+        <a href="{{ path('app_quick_login', {'role': 'admin'}) }}">Admin</a>
+        <a href="{{ path('app_quick_login', {'role': 'teacher'}) }}">Teacher</a>
+        <a href="{{ path('app_quick_login', {'role': 'student'}) }}">Student</a>
+      </div>
+
+      <p class="note">Account creation is handled by an administrator.</p>
+    </div>
+  </div>
+{% endblock %}

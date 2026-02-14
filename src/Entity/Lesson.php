@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\LessonRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,12 +23,18 @@ class Lesson
     private Collection $studyMaterials;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Title is required")]
+    #[Assert\Length(max: 255)]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Subject is required")]
+    #[Assert\Length(max: 255)]
     private ?string $subject = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Difficulty is required")]
+    #[Assert\Choice(choices: ['easy','medium','hard'], message: 'Choose a valid difficulty.')]
     private ?string $difficulty = null;
 
     #[ORM\Column(length: 255, nullable: true)]
