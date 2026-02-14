@@ -6,11 +6,40 @@
 {% block content %}
   <section class="panel">
     <h1 style="margin:0 0 8px">Quizzes</h1>
-    <p style="margin:0;color:#bdd0ed">Monitor quiz content quality and deployment across lessons.</p>
+    <p style="margin:0;color:#bdd0ed">Track all quizzes, source lessons, question count, and ownership.</p>
   </section>
 
   <section class="panel" style="margin-top:12px">
-    <a href="{{ path('quiz_index') }}" class="action">View Student Quizzes</a>
-    <a href="{{ path('quiz_new') }}" class="action gold">Add Quiz</a>
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Quiz</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Lesson</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Difficulty</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Creator</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Questions</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in quizRows %}
+          <tr>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)"><a href="{{ path('admin_quiz_show', {'id': row.id}) }}" style="color:#ffd86b;text-decoration:none">#{{ row.id }}</a></td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ row.lesson ?: '-' }}</td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ row.difficulty }}</td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ row.creatorName ?: '-' }} ({{ row.creatorRole ?: '-' }})</td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ row.questionsCount }}</td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">
+              <form method="post" action="{{ path('admin_quiz_delete', {'id': row.id}) }}" style="margin:0">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin_quiz_delete_' ~ row.id) }}">
+                <button type="submit" class="action" style="margin:0;padding:6px 8px;border:none;cursor:pointer">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="6" style="padding:10px 4px;color:#bdd0ed">No quizzes found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </section>
 {% endblock %}

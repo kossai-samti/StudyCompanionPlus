@@ -1,0 +1,37 @@
+{% extends 'back/base.html.twig' %}
+{% set panel = 'teacher' %}
+
+{% block title %}Teacher | Create Manual Lesson{% endblock %}
+
+{% block content %}
+  <section class="panel" style="max-width:920px;margin:0 auto">
+    <h1 style="margin-top:0">Create Lesson Manually</h1>
+    <p style="color:#bdd0ed">After saving, you will be redirected to quiz builder to add custom questions and correct answers.</p>
+    <form method="post">
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <input name="title" type="text" placeholder="Lesson title" required style="padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff">
+        <input name="subject" type="text" placeholder="Subject" required style="padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff">
+        <select name="difficulty" style="padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff">
+          <option value="easy">Easy</option>
+          <option value="medium" selected>Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+        <select name="group_id" required style="padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff">
+          <option value="">Select target group</option>
+          {% for group in groups %}
+            <option value="{{ group.id }}">{{ group.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <p style="margin:10px 0 6px">Manual summary</p>
+      <textarea name="summary" rows="6" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff"></textarea>
+      <p style="margin:10px 0 6px">Manual flashcards (one per line as plain text)</p>
+      <textarea name="flashcards" rows="6" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff"></textarea>
+
+      <p style="margin:12px 0 0">
+        <button type="submit" class="action gold" style="border:none;cursor:pointer">Save + Build Quiz</button>
+      </p>
+    </form>
+  </section>
+{% endblock %}

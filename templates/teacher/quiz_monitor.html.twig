@@ -1,0 +1,67 @@
+{% extends 'back/base.html.twig' %}
+{% set panel = 'teacher' %}
+
+{% block title %}Teacher | Quiz Monitoring{% endblock %}
+
+{% block content %}
+  <section class="panel">
+    <h1 style="margin:0 0 8px">Quiz Monitoring by Group</h1>
+    <p style="margin:0;color:#bdd0ed">Group -> Lesson -> Student results. Add comments to each wrong answer.</p>
+  </section>
+
+  {% for row in groupRows %}
+    <section class="panel" style="margin-top:12px">
+      <h2 style="margin:0 0 10px;color:#ffd86b">{{ row.group.name }}</h2>
+
+      {% for lessonNode in row.lessons %}
+        <article class="panel" style="margin-bottom:10px">
+          <h3 style="margin-top:0">{{ lessonNode.lesson.title }}</h3>
+
+          {% for student in lessonNode.students %}
+            <div style="border:1px solid rgba(197,218,255,.25);border-radius:10px;padding:10px;margin-bottom:8px">
+              <p style="margin:0 0 6px"><strong>{{ student.name }}</strong> ({{ student.email }})</p>
+              <p style="margin:0 0 6px">Score: {{ student.score }}% | Mastery: {{ student.mastery }} | Weak topics: {{ student.weakTopics ?: '-' }}</p>
+
+              {% if student.wrongAnswers is not empty %}
+                <ul style="margin:0;padding-left:18px">
+                  {% for wrong in student.wrongAnswers %}
+                    <li style="margin-bottom:8px">
+                      <div><strong>Q:</strong> {{ wrong.question }}</div>
+                      <div><strong>Student:</strong> {{ wrong.answer }} | <strong>Correct:</strong> {{ wrong.correct }}</div>
+                      {% if wrong.comments is not empty %}
+                        <div style="margin-top:4px">
+                          <strong>Existing notes:</strong>
+                          <ul style="margin:4px 0 0;padding-left:18px">
+                            {% for c in wrong.comments %}
+                              <li>{{ c }}</li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                      {% endif %}
+                      <form method="post" action="{{ path('teacher_quiz_comment') }}" style="margin-top:6px">
+                        <input type="hidden" name="student_id" value="{{ student.profileId }}">
+                        <input type="hidden" name="question_id" value="{{ wrong.questionId }}">
+                        <input type="text" name="comment" placeholder="Comment on this wrong answer" required style="width:72%;padding:8px;border-radius:8px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff">
+                        <button type="submit" class="action" style="margin:0 0 0 6px;padding:8px 10px;border:none;cursor:pointer">Save Note</button>
+                      </form>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p style="margin:0;color:#bdd0ed">No wrong answers recorded for this lesson/student.</p>
+              {% endif %}
+            </div>
+          {% else %}
+            <p style="color:#bdd0ed">No student results for this lesson.</p>
+          {% endfor %}
+        </article>
+      {% else %}
+        <p style="color:#bdd0ed">No lesson performance data in this group.</p>
+      {% endfor %}
+    </section>
+  {% else %}
+    <section class="panel" style="margin-top:12px">
+      <p style="margin:0;color:#bdd0ed">No grouped quiz performance data available yet.</p>
+    </section>
+  {% endfor %}
+{% endblock %}

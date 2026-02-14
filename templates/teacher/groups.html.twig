@@ -6,12 +6,90 @@
 {% block content %}
   <section class="panel">
     <h1 style="margin:0 0 8px">Groups</h1>
-    <p style="margin:0;color:#bdd0ed">Organize students by class, level, or topic focus.</p>
+    <p style="margin:0;color:#bdd0ed">Create groups, add students, share lessons, and monitor progress in one place.</p>
   </section>
 
-  <section class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px">
-    <article class="panel"><h3 style="margin-top:0">Grade 10 - A</h3><p>18 students</p></article>
-    <article class="panel"><h3 style="margin-top:0">Science Club</h3><p>12 students</p></article>
-    <article class="panel"><h3 style="margin-top:0">Math Support</h3><p>10 students</p></article>
+  <section class="grid" style="grid-template-columns:repeat(2,minmax(280px,1fr));margin-top:12px">
+    <article class="panel">
+      <h3 style="margin-top:0">Create Group</h3>
+      <form method="post">
+        <input type="hidden" name="action" value="create_group">
+        <input type="text" name="group_name" required placeholder="Group name" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff">
+        <p style="margin:10px 0 0"><button type="submit" class="action gold" style="cursor:pointer;border:none">Create</button></p>
+      </form>
+    </article>
+
+    <article class="panel">
+      <h3 style="margin-top:0">Add Student to Group</h3>
+      <form method="post">
+        <input type="hidden" name="action" value="assign_student">
+        <select name="student_id" required style="width:100%;margin-bottom:8px;padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff">
+          <option value="">Select student</option>
+          {% for profile in allStudents %}
+            {% if profile.user %}
+              <option value="{{ profile.id }}">{{ profile.user.name }} (Grade {{ profile.grade ?: '-' }})</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        <select name="group_id" required style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff">
+          <option value="">Select group</option>
+          {% for g in allGroups %}
+            <option value="{{ g.id }}">{{ g.name }}</option>
+          {% endfor %}
+        </select>
+        <p style="margin:10px 0 0"><button type="submit" class="action gold" style="cursor:pointer;border:none">Assign</button></p>
+      </form>
+    </article>
+  </section>
+
+  <section class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:12px">
+    {% for group in groupsData %}
+      <article class="panel">
+        <h3 style="margin-top:0">{{ group.name }}</h3>
+        <p style="margin:6px 0"><strong>Teacher:</strong> {{ group.teacherName }}</p>
+        <p style="margin:6px 0"><strong>Students:</strong> {{ group.students|length }}</p>
+
+        {% if group.students is not empty %}
+          <table style="width:100%;border-collapse:collapse;margin-top:8px">
+            <thead>
+              <tr>
+                <th style="text-align:left;padding:6px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Student</th>
+                <th style="text-align:left;padding:6px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Grade</th>
+                <th style="text-align:left;padding:6px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Avg. Score</th>
+                <th style="text-align:left;padding:6px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for student in group.students %}
+                <tr>
+                  <td style="padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ student.name }}</td>
+                  <td style="padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ student.grade ?: '-' }}</td>
+                  <td style="padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.15)">
+                    {% if student.avgScore is not null %}
+                      {{ student.avgScore|number_format(1) }}%
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                  <td style="padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.15)">
+                    <form method="post" style="margin:0">
+                      <input type="hidden" name="action" value="remove_student">
+                      <input type="hidden" name="student_id" value="{{ student.studentProfileId }}">
+                      <button type="submit" class="action" style="margin:0;padding:6px 8px;border:none;cursor:pointer">Remove</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p style="margin:10px 0 0;color:#bdd0ed">No students assigned yet.</p>
+        {% endif %}
+      </article>
+    {% else %}
+      <article class="panel">
+        <p style="margin:0;color:#bdd0ed">No groups found. Create a group and add students.</p>
+      </article>
+    {% endfor %}
   </section>
 {% endblock %}

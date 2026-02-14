@@ -19,9 +19,22 @@
   </section>
 
   <section class="grid admin-stats" style="grid-template-columns:repeat(3,1fr);margin-top:12px">
-    <article class="panel"><small style="color:#adc3e7">Total users</small><h2 style="margin:6px 0 0">320</h2></article>
-    <article class="panel"><small style="color:#adc3e7">Total lessons</small><h2 style="margin:6px 0 0">124</h2></article>
-    <article class="panel"><small style="color:#adc3e7">Total quizzes</small><h2 style="margin:6px 0 0">278</h2></article>
+    <article class="panel"><small style="color:#adc3e7">Total users</small><h2 style="margin:6px 0 0">{{ totalUsers }}</h2></article>
+    <article class="panel"><small style="color:#adc3e7">Total lessons</small><h2 style="margin:6px 0 0">{{ totalLessons }}</h2></article>
+    <article class="panel"><small style="color:#adc3e7">Total quizzes</small><h2 style="margin:6px 0 0">{{ totalQuizzes }}</h2></article>
+  </section>
+
+  <section class="grid" style="grid-template-columns:repeat(2,1fr);margin-top:12px">
+    <a href="{{ path('admin_users', {'role': 'teacher'}) }}" class="panel" style="text-decoration:none;display:block">
+      <small style="color:#adc3e7">Teachers</small>
+      <h2 style="margin:6px 0 0">{{ teacherCount }} users</h2>
+      <p style="margin:8px 0 0;color:#bdd0ed">Click to view all teacher details.</p>
+    </a>
+    <a href="{{ path('admin_users', {'role': 'student'}) }}" class="panel" style="text-decoration:none;display:block">
+      <small style="color:#adc3e7">Students</small>
+      <h2 style="margin:6px 0 0">{{ studentCount }} users</h2>
+      <p style="margin:8px 0 0;color:#bdd0ed">Click to view by grade and groups.</p>
+    </a>
   </section>
 
   <section class="panel" style="margin-top:12px">

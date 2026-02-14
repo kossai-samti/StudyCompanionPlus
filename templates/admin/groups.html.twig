@@ -6,12 +6,20 @@
 {% block content %}
   <section class="panel">
     <h1 style="margin:0 0 8px">Groups</h1>
-    <p style="margin:0;color:#bdd0ed">Manage all educational groups and memberships.</p>
+    <p style="margin:0;color:#bdd0ed">Groups are created by teachers to share lessons and track student progress.</p>
   </section>
 
-  <section class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px">
-    <article class="panel"><h3 style="margin-top:0">Grade 9</h3><p>45 users</p></article>
-    <article class="panel"><h3 style="margin-top:0">Grade 10</h3><p>53 users</p></article>
-    <article class="panel"><h3 style="margin-top:0">Teachers</h3><p>18 users</p></article>
+  <section class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:12px">
+    {% for row in groupRows %}
+      <article class="panel">
+        <h3 style="margin-top:0"><a href="{{ path('admin_group_show', {'id': row.id}) }}" style="text-decoration:none;color:#ffd86b">{{ row.name }}</a></h3>
+        <p style="margin:6px 0"><strong>Teacher:</strong> {{ row.teacher }}</p>
+        <p style="margin:6px 0"><strong>Students:</strong> {{ row.studentsCount }}</p>
+        <p style="margin:6px 0"><strong>Created by:</strong> {{ row.createdBy }}</p>
+        <p style="margin:6px 0"><strong>Created at:</strong> {{ row.createdAt ? row.createdAt|date('Y-m-d H:i') : '-' }}</p>
+      </article>
+    {% else %}
+      <article class="panel"><p style="margin:0;color:#bdd0ed">No groups found.</p></article>
+    {% endfor %}
   </section>
 {% endblock %}

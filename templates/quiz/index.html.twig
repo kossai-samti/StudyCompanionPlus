@@ -2,24 +2,93 @@
 
 {% block title %}Student Quizzes{% endblock %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <style>
+    .quiz-cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,220px);
+      gap:14px;
+      justify-content:start;
+    }
+    .quiz-card{
+      text-decoration:none;
+      background:#fff;
+      border:1px solid #d7cff9;
+      border-radius:8px;
+      width:220px;
+      height:220px;
+      padding:16px;
+      box-shadow:0 10px 22px rgba(39,23,81,.08);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .score-ring{
+      --p:0;
+      --c:#6d42dc;
+      width:78px;height:78px;border-radius:50%;
+      background:conic-gradient(var(--c) calc(var(--p) * 1%), #eae4ff 0);
+      display:grid;place-items:center;
+    }
+    .score-ring span{
+      width:60px;height:60px;border-radius:50%;
+      background:#fff;display:grid;place-items:center;
+      font-weight:800;color:#20153b;
+    }
+    @media (max-width: 560px){
+      .quiz-cards{grid-template-columns:1fr}
+      .quiz-card{width:100%;height:auto;min-height:220px}
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
+
   <header class="page-card" style="display:flex;justify-content:space-between;gap:10px;align-items:center">
     <div>
       <h1 style="margin:0">Quizzes</h1>
-      <p style="margin:6px 0 0;color:#5e5091">Choose a quiz and continue your learning path.</p>
+      <p style="margin:6px 0 0;color:#5e5091">
+        {{ viewerRole == 'student' ? 'Completed quizzes and your results.' : 'Manage and review quizzes.' }}
+      </p>
     </div>
-    <a href="{{ path('quiz_new') }}" style="text-decoration:none;background:#6c45db;color:#fff;padding:10px 12px;border-radius:10px;font-weight:700">Create Quiz</a>
+    {% if viewerRole == 'teacher' %}
+      <a href="{{ path('quiz_new') }}" style="text-decoration:none;background:#6c45db;color:#fff;padding:10px 12px;border-radius:10px;font-weight:700">Create Quiz</a>
+    {% endif %}
   </header>
 
   <section class="grid" style="margin-top:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
-    {% for q in quizzes %}
-      <article class="page-card">
-        <h3 style="margin-top:0">Quiz #{{ q.id }}</h3>
-        <p><strong>Difficulty:</strong> {{ q.difficulty }}</p>
-        <p style="margin:0"><a href="{{ path('quiz_show', {'id': q.id}) }}" style="text-decoration:none;color:#6b44db;font-weight:700">Start Quiz</a></p>
-      </article>
+    {% if viewerRole == 'student' %}
+      <div class="quiz-cards" style="grid-column:1/-1">
+      {% for card in resultCards %}
+        <a href="{{ path('quiz_review', {'id': card.quizId}) }}" class="quiz-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+            <h3 style="margin:0">{{ card.title }}</h3>
+            <div class="score-ring" style="--p:{{ card.score }};--c:{{ card.color }}">
+              <span>{{ card.score|number_format(0) }}%</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="background:#fff3f3;color:#a53535;border:1px solid #f4c8c8;padding:5px 8px;border-radius:999px;font-size:12px">Errors: {{ card.errors }}</span>
+            <span style="background:#eef9f2;color:#246f47;border:1px solid #c9ecd8;padding:5px 8px;border-radius:999px;font-size:12px">Correct: {{ card.correct }}</span>
+            <span style="background:#fff7ea;color:#a06311;border:1px solid #f1d9b0;padding:5px 8px;border-radius:999px;font-size:12px">Comments: {{ card.notesCount }}</span>
+          </div>
+        </a>
+      {% else %}
+        <article class="page-card"><p style="margin:0">No completed quizzes yet. Start one from a lesson.</p></article>
+      {% endfor %}
+      </div>
     {% else %}
-      <article class="page-card"><p style="margin:0">No quizzes yet.</p></article>
-    {% endfor %}
+      {% for q in quizzes %}
+        <article class="page-card">
+          <h3 style="margin-top:0">Quiz #{{ q.id }}</h3>
+          <p><strong>Difficulty:</strong> {{ q.difficulty }}</p>
+          <p style="margin:0"><a href="{{ path('quiz_show', {'id': q.id}) }}" style="text-decoration:none;color:#6b44db;font-weight:700">Open Quiz</a></p>
+        </article>
+      {% else %}
+        <article class="page-card"><p style="margin:0">No quizzes yet.</p></article>
+      {% endfor %}
+    {% endif %}
   </section>
 {% endblock %}

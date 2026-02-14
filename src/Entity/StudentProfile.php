@@ -24,7 +24,7 @@ class StudentProfile
     #[Assert\NotNull(message: 'Student must be linked to a User')]
     private ?User $user = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'students')]
     private ?Group $studentGroup = null;
 
     /**

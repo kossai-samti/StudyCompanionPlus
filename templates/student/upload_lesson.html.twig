@@ -1,0 +1,21 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Student | Upload Lesson{% endblock %}
+
+{% block content %}
+  <section class="page-card" style="max-width:880px;margin:0 auto">
+    <h1 style="margin-top:0">Upload Lesson to AI</h1>
+    <p style="margin:8px 0;color:#5f5392">Upload/paste your lesson content. AI will generate title, subject, difficulty, summary, and flashcards.</p>
+
+    <form method="post">
+      <label style="display:block;margin-bottom:6px;font-weight:700">Optional file path</label>
+      <input name="file_path" type="text" style="width:100%;padding:10px;border:1px solid #d8cff7;border-radius:10px;margin-bottom:10px">
+
+      <label style="display:block;margin-bottom:6px;font-weight:700">Lesson content</label>
+      <textarea name="content" rows="12" style="width:100%;padding:10px;border:1px solid #d8cff7;border-radius:10px" required></textarea>
+      <p style="margin:12px 0 0">
+        <button type="submit" style="background:#6c45db;color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer">Generate with AI</button>
+      </p>
+    </form>
+  </section>
+{% endblock %}

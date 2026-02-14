@@ -10,8 +10,41 @@
   </section>
 
   <section class="panel" style="margin-top:12px">
-    <a href="{{ path('lesson_new') }}" class="action gold">Create Lesson</a>
-    <a href="{{ path('lesson_index') }}" class="action">View Student Lesson Cards</a>
+    <a href="{{ path('teacher_lesson_create_ai') }}" class="action gold">Create with AI</a>
+    <a href="{{ path('teacher_lesson_create_manual') }}" class="action">Create Manually</a>
+    <a href="{{ path('teacher_lessons') }}" class="action">Published Lessons</a>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <h3 style="margin-top:0">My Lessons (Teacher Uploads)</h3>
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Title</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Subject</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Difficulty</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Group</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Created</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in lessonRows %}
+          <tr>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ row.title }}</td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ row.subject }}</td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ row.difficulty }}</td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ row.group ?: '-' }}</td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ row.createdAt ? row.createdAt|date('Y-m-d H:i') : '-' }}</td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">
+              <a href="{{ path('teacher_quiz_builder', {'lessonId': row.id}) }}" class="action" style="margin:0;padding:6px 8px">Build Quiz</a>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="6" style="padding:10px 4px;color:#bdd0ed">No teacher lessons yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </section>
 
   <section class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px">

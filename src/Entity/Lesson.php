@@ -40,6 +40,18 @@ class Lesson
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $file_path = null;
 
+    #[ORM\ManyToOne]
+    private ?Group $target_group = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $created_by_role = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $created_by_name = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
     /**
      * @var Collection<int, Quiz>
      */
@@ -57,6 +69,7 @@ class Lesson
         $this->studyMaterials = new ArrayCollection();
         $this->quizzes = new ArrayCollection();
         $this->performanceReports = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -138,6 +151,54 @@ class Lesson
     public function setFilePath(?string $file_path): static
     {
         $this->file_path = $file_path;
+
+        return $this;
+    }
+
+    public function getTargetGroup(): ?Group
+    {
+        return $this->target_group;
+    }
+
+    public function setTargetGroup(?Group $target_group): static
+    {
+        $this->target_group = $target_group;
+
+        return $this;
+    }
+
+    public function getCreatedByRole(): ?string
+    {
+        return $this->created_by_role;
+    }
+
+    public function setCreatedByRole(?string $created_by_role): static
+    {
+        $this->created_by_role = $created_by_role;
+
+        return $this;
+    }
+
+    public function getCreatedByName(): ?string
+    {
+        return $this->created_by_name;
+    }
+
+    public function setCreatedByName(?string $created_by_name): static
+    {
+        $this->created_by_name = $created_by_name;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }

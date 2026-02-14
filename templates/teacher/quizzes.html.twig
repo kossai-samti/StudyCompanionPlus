@@ -6,12 +6,48 @@
 {% block content %}
   <section class="panel">
     <h1 style="margin:0 0 8px">Quiz Management</h1>
-    <p style="margin:0;color:#bdd0ed">Create, refine, and monitor AI-generated quizzes and student outcomes.</p>
+    <p style="margin:0;color:#bdd0ed">All quizzes you created. Click a quiz to modify its questions.</p>
   </section>
 
   <section class="panel" style="margin-top:12px">
-    <a href="{{ path('quiz_new') }}" class="action gold">Create Quiz</a>
-    <a href="{{ path('quiz_index') }}" class="action">View Student Quiz Flow</a>
+    <a href="{{ path('teacher_lessons') }}" class="action gold">Build New Quiz from Lesson</a>
+    <a href="{{ path('teacher_quiz_monitor') }}" class="action">Monitor by Groups</a>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <h3 style="margin-top:0">My Quizzes</h3>
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Quiz</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Lesson</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Difficulty</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Questions</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Created</th>
+          <th style="text-align:left;padding:8px 4px;border-bottom:1px solid rgba(197,218,255,.25)">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in quizRows %}
+          <tr>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">#{{ row.id }}</td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ row.lessonTitle ?: '-' }}</td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ row.difficulty }}</td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ row.questionsCount }}</td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">{{ row.createdAt ? row.createdAt|date('Y-m-d H:i') : '-' }}</td>
+            <td style="padding:10px 4px;border-bottom:1px solid rgba(197,218,255,.15)">
+              {% if row.lessonId %}
+                <a href="{{ path('teacher_quiz_builder', {'lessonId': row.lessonId}) }}" class="action" style="margin:0;padding:6px 8px">Modify</a>
+              {% else %}
+                -
+              {% endif %}
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="6" style="padding:10px 4px;color:#bdd0ed">No quizzes created yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </section>
 
   <section class="panel" style="margin-top:12px">

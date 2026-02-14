@@ -1,0 +1,27 @@
+{% extends 'back/base.html.twig' %}
+{% set panel = 'admin' %}
+
+{% block title %}Admin | Lesson Details{% endblock %}
+
+{% block content %}
+  <section class="panel">
+    <h1 style="margin:0 0 8px">{{ lesson.title }}</h1>
+    <p style="margin:4px 0;color:#bdd0ed"><strong>Subject:</strong> {{ lesson.subject }}</p>
+    <p style="margin:4px 0;color:#bdd0ed"><strong>Difficulty:</strong> {{ lesson.difficulty }}</p>
+    <p style="margin:4px 0;color:#bdd0ed"><strong>Created by:</strong> {{ lesson.createdByName ?: '-' }} ({{ lesson.createdByRole ?: '-' }})</p>
+    <p style="margin:4px 0;color:#bdd0ed"><strong>Created at:</strong> {{ lesson.createdAt ? lesson.createdAt|date('Y-m-d H:i') : '-' }}</p>
+    <p style="margin:4px 0;color:#bdd0ed"><strong>Target group:</strong> {{ lesson.targetGroup ? lesson.targetGroup.name : 'Individual student lesson' }}</p>
+    {% if lesson.targetGroup %}
+      <p style="margin:4px 0;color:#bdd0ed"><strong>Teacher:</strong> {{ teacherName }}</p>
+      <p style="margin:4px 0;color:#bdd0ed"><strong>Students in group:</strong> {{ lesson.targetGroup.students|length }}</p>
+    {% endif %}
+    <p style="margin:4px 0;color:#bdd0ed"><strong>Progress avg score:</strong> {{ avgScore is not null ? avgScore|number_format(1) ~ '%' : '-' }}</p>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <form method="post" action="{{ path('admin_lesson_delete', {'id': lesson.id}) }}">
+      <input type="hidden" name="_token" value="{{ csrf_token('admin_lesson_delete_' ~ lesson.id) }}">
+      <button type="submit" class="action" style="margin:0;border:none;cursor:pointer">Delete Lesson</button>
+    </form>
+  </section>
+{% endblock %}

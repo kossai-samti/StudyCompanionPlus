@@ -1,0 +1,54 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Quiz Review{% endblock %}
+
+{% block content %}
+  <p style="margin:0 0 10px"><a href="{{ path('quiz_index') }}" style="text-decoration:none;color:#6b44db;font-weight:700">← Back to results</a></p>
+
+  <article class="page-card" style="max-width:860px;margin:0 auto">
+    <h1 style="margin-top:0">Review - {{ quiz.lesson ? quiz.lesson.title : ('Quiz #' ~ quiz.id) }}</h1>
+
+    {% for question in quiz.questions %}
+      {% set answer = answerByQuestionId[question.id] ?? null %}
+      <section class="page-card" style="margin-top:12px;background:#fcfbff">
+        <h3 style="margin:0 0 10px">Question {{ loop.index }} of {{ quiz.questions|length }}</h3>
+        <p style="margin:0 0 10px;font-weight:700">{{ question.text }}</p>
+
+        {% for option in question.options %}
+          {% set isCorrect = option == question.correctAnswer %}
+          {% set isSelected = answer and option == answer.answer %}
+          {% set bg = '#faf8ff' %}
+          {% set bd = '#ddd2ff' %}
+          {% set txt = '#1f1636' %}
+          {% if isSelected and not isCorrect %}
+            {% set bg = '#fff1f1' %}
+            {% set bd = '#e06161' %}
+            {% set txt = '#b42323' %}
+          {% endif %}
+          {% if isCorrect %}
+            {% set bg = '#effaf2' %}
+            {% set bd = '#bfe7c8' %}
+            {% set txt = '#1f7a42' %}
+          {% endif %}
+          <div style="display:block;background:{{ bg }};border:2px solid {{ bd }};border-radius:12px;padding:11px;margin-bottom:8px;color:{{ txt }}">
+            {{ option }}
+          </div>
+        {% endfor %}
+
+        {% set notes = notesByQuestionId[question.id] ?? [] %}
+        {% if notes is not empty %}
+          <div style="margin-top:8px;padding:10px;background:#fff8e9;border:1px solid #f0ddb0;border-radius:10px">
+            <strong>Teacher note{{ notes|length > 1 ? 's' : '' }}:</strong>
+            <ul style="margin:6px 0 0;padding-left:18px">
+              {% for note in notes %}
+                <li>{{ note }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+      </section>
+    {% else %}
+      <section class="page-card" style="margin-top:12px"><p style="margin:0">No questions available.</p></section>
+    {% endfor %}
+  </article>
+{% endblock %}

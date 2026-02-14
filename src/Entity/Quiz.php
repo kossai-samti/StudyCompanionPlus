@@ -26,6 +26,15 @@ class Quiz
     #[Assert\Choice(choices: ['easy','medium','hard'], message: 'Choose a valid difficulty.')]
     private ?string $difficulty = null;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $created_by_role = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $created_by_name = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
     /**
      * @var Collection<int, Question>
      */
@@ -35,6 +44,7 @@ class Quiz
     public function __construct()
     {
         $this->questions = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -62,6 +72,42 @@ class Quiz
     public function setDifficulty(string $difficulty): static
     {
         $this->difficulty = $difficulty;
+
+        return $this;
+    }
+
+    public function getCreatedByRole(): ?string
+    {
+        return $this->created_by_role;
+    }
+
+    public function setCreatedByRole(?string $created_by_role): static
+    {
+        $this->created_by_role = $created_by_role;
+
+        return $this;
+    }
+
+    public function getCreatedByName(): ?string
+    {
+        return $this->created_by_name;
+    }
+
+    public function setCreatedByName(?string $created_by_name): static
+    {
+        $this->created_by_name = $created_by_name;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }

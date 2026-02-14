@@ -5,6 +5,7 @@
 {% block content %}
   <section class="page-card" style="max-width:760px;margin:0 auto">
     <h1 style="margin-top:0">Create Quiz</h1>
+    {{ form_errors(form) }}
     {{ form_start(form) }}
     {{ form_widget(form) }}
     <p style="margin:12px 0 0">

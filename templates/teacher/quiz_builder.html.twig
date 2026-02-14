@@ -1,0 +1,59 @@
+{% extends 'back/base.html.twig' %}
+{% set panel = 'teacher' %}
+
+{% block title %}Teacher | Quiz Builder{% endblock %}
+
+{% block content %}
+  <section class="panel">
+    <h1 style="margin:0 0 8px">Quiz Builder - {{ lesson.title }}</h1>
+    <p style="margin:0;color:#bdd0ed">Add your own questions and mark the correct answer.</p>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <h3 style="margin-top:0">Add Question</h3>
+    <form method="post">
+      <textarea name="question_text" rows="4" placeholder="Question text" required style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff"></textarea>
+      <p style="margin:10px 0 6px">Options (one per line)</p>
+      <textarea name="options_raw" rows="5" required style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff"></textarea>
+      <p style="margin:10px 0 6px">Correct answer</p>
+      <input name="correct_answer" type="text" required style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff">
+      <p style="margin:12px 0 0">
+        <button type="submit" class="action gold" style="border:none;cursor:pointer">Add Question</button>
+      </p>
+    </form>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <h3 style="margin-top:0">Current Questions</h3>
+    {% for q in quiz.questions %}
+      <article class="panel" style="margin-bottom:10px">
+        <form method="post">
+          <input type="hidden" name="action" value="update">
+          <input type="hidden" name="question_id" value="{{ q.id }}">
+          <textarea name="question_text" rows="3" required style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff">{{ q.text }}</textarea>
+          <p style="margin:8px 0 6px">Options (one per line)</p>
+          <textarea name="options_raw" rows="4" required style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff">{{ q.options|join('\n') }}</textarea>
+          <p style="margin:8px 0 6px">Correct answer</p>
+          <input name="correct_answer" type="text" required value="{{ q.correctAnswer }}" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(197,218,255,.25);background:#0d2444;color:#fff">
+          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+            <button type="submit" class="action gold" style="margin:0;border:none;cursor:pointer">Update</button>
+          </div>
+        </form>
+        <form method="post" style="margin-top:8px">
+          <input type="hidden" name="action" value="delete">
+          <input type="hidden" name="question_id" value="{{ q.id }}">
+          <button type="submit" class="action" style="margin:0;border:none;cursor:pointer">Delete</button>
+        </form>
+      </article>
+    {% else %}
+      <p style="margin:0;color:#bdd0ed">No questions yet.</p>
+    {% endfor %}
+
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <form method="post" action="{{ path('teacher_quiz_builder_finish', {'lessonId': lesson.id}) }}" style="margin:0">
+        <button type="submit" class="action gold" style="margin:0;border:none;cursor:pointer">Finish Quiz</button>
+      </form>
+      <a href="{{ path('teacher_lessons') }}" class="action" style="margin:0">Back to Lessons</a>
+    </div>
+  </section>
+{% endblock %}

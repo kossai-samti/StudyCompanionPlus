@@ -3,12 +3,20 @@
 {% block title %}Student Lessons{% endblock %}
 
 {% block content %}
+  {% set viewer = app.session.get('demo_user')|default({'role': 'student'}) %}
+  {% set role = viewer.role|default('student') %}
   <header class="page-card" style="display:flex;justify-content:space-between;gap:10px;align-items:center">
     <div>
       <h1 style="margin:0">Lessons</h1>
       <p style="margin:6px 0 0;color:#5e5091">Review all available lessons and open details to study.</p>
     </div>
-    <a href="{{ path('lesson_new') }}" style="text-decoration:none;background:#6c45db;color:#fff;padding:10px 12px;border-radius:10px;font-weight:700">Create Lesson</a>
+    {% if role in ['teacher', 'student'] %}
+      {% if role == 'student' %}
+        <a href="{{ path('student_lesson_upload') }}" style="text-decoration:none;background:#6c45db;color:#fff;padding:10px 12px;border-radius:10px;font-weight:700">Upload to AI</a>
+      {% else %}
+        <a href="{{ path('teacher_lesson_create_ai') }}" style="text-decoration:none;background:#6c45db;color:#fff;padding:10px 12px;border-radius:10px;font-weight:700">Teacher Create</a>
+      {% endif %}
+    {% endif %}
   </header>
 
   <section class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:14px">

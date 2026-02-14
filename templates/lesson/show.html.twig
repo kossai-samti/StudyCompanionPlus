@@ -14,25 +14,29 @@
 
     <section id="summary" class="page-card" style="margin-top:14px;background:#fcfbff">
       <h3 style="margin-top:0">Summary</h3>
-      <p>AI-generated key points for this lesson appear here with concise explanations and structure.</p>
-      <ul style="margin:10px 0;padding-left:18px">
-        <li>Main concept explained in simple terms.</li>
-        <li>Important formulas, definitions, and examples.</li>
-        <li>Quick recap to prepare for assessment.</li>
-      </ul>
+      {% if material and material.summary %}
+        <pre style="white-space:pre-wrap;margin:0">{{ material.summary }}</pre>
+      {% else %}
+        <p>No summary generated yet.</p>
+      {% endif %}
     </section>
 
     <section id="flashcards" class="page-card" style="margin-top:12px;background:#fffdf7">
       <h3 style="margin-top:0">Flashcards</h3>
       <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
-        <div style="padding:12px;border-radius:12px;background:#fff;border:1px solid #efe1a8"><strong>Q:</strong> What is the core principle?</div>
-        <div style="padding:12px;border-radius:12px;background:#fff;border:1px solid #efe1a8"><strong>Q:</strong> Which example applies it?</div>
-        <div style="padding:12px;border-radius:12px;background:#fff;border:1px solid #efe1a8"><strong>Q:</strong> When do we use this method?</div>
+        {% for card in flashcards %}
+          <div style="padding:12px;border-radius:12px;background:#fff;border:1px solid #efe1a8">
+            <strong>Q:</strong> {{ card.q|default(card.question|default('')) }}<br>
+            <strong>A:</strong> {{ card.a|default(card.answer|default('')) }}
+          </div>
+        {% else %}
+          <div style="padding:12px;border-radius:12px;background:#fff;border:1px solid #efe1a8">No flashcards generated yet.</div>
+        {% endfor %}
       </div>
     </section>
 
     <p style="margin:16px 0 0">
-      <a href="{{ path('quiz_index') }}" style="display:inline-block;text-decoration:none;background:#ff6b61;color:#fff;padding:11px 14px;border-radius:10px;font-weight:700">Take Quiz</a>
+      <a href="{{ path('quiz_start_for_lesson', {'lesson': lesson.id}) }}" style="display:inline-block;text-decoration:none;background:#ff6b61;color:#fff;padding:11px 14px;border-radius:10px;font-weight:700">Take Quiz</a>
     </p>
   </article>
 {% endblock %}

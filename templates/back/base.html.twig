@@ -154,6 +154,13 @@
   </nav>
 
   <main class="container">
+    {% for label, messages in app.flashes %}
+      {% for message in messages %}
+        <div class="panel" style="margin-bottom:10px;border-left:4px solid {{ label == 'error' ? '#ff6b61' : '#ffd86b' }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endfor %}
     {% block content %}{% endblock %}
   </main>
 {% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'back/base.html.twig' %}
+{% set panel = 'admin' %}
+
+{% block title %}Admin | Quiz Details{% endblock %}
+
+{% block content %}
+  <section class="panel">
+    <h1 style="margin:0 0 8px">Quiz #{{ quiz.id }}</h1>
+    <p style="margin:4px 0;color:#bdd0ed"><strong>Lesson:</strong> {{ quiz.lesson ? quiz.lesson.title : '-' }}</p>
+    <p style="margin:4px 0;color:#bdd0ed"><strong>Difficulty:</strong> {{ quiz.difficulty }}</p>
+    <p style="margin:4px 0;color:#bdd0ed"><strong>Created by:</strong> {{ quiz.createdByName ?: '-' }} ({{ quiz.createdByRole ?: '-' }})</p>
+    <p style="margin:4px 0;color:#bdd0ed"><strong>Created at:</strong> {{ quiz.createdAt ? quiz.createdAt|date('Y-m-d H:i') : '-' }}</p>
+    <p style="margin:4px 0;color:#bdd0ed"><strong>Questions:</strong> {{ quiz.questions|length }}</p>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <form method="post" action="{{ path('admin_quiz_delete', {'id': quiz.id}) }}">
+      <input type="hidden" name="_token" value="{{ csrf_token('admin_quiz_delete_' ~ quiz.id) }}">
+      <button type="submit" class="action" style="margin:0;border:none;cursor:pointer">Delete Quiz</button>
+    </form>
+  </section>
+{% endblock %}
