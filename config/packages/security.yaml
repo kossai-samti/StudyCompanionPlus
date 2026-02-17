@@ -1,0 +1,51 @@
+# config/packages/security.yaml
+security:
+    # 1. Setup Password Hashing
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+
+    # 2. Tell Symfony to look in the DATABASE
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_profiler|_wdt|assets|build)/
+            security: false
+        main:
+            lazy: true
+            provider: app_user_provider
+            
+            # 3. Configure the Login Form
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+                default_target_path: app_login_redirect
+                
+                # Username/Password parameters
+                username_parameter: email
+                password_parameter: password
+            
+            logout:
+                path: app_logout
+                # CHANGED THIS: Point this to your landing page route (usually 'home' or 'app_home')
+                target: home 
+
+    # 4. Role-based access
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/teacher, roles: ROLE_TEACHER }
+        - { path: ^/student, roles: ROLE_STUDENT }
+
+when@test:
+    security:
+        password_hashers:
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4
+                time_cost: 3
+                memory_cost: 10

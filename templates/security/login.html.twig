@@ -1,107 +1,405 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}StudyCompanionPlus | Sign In{% endblock %}
+{% block title %}Terminal Login | StudyCompanionPlus{% endblock %}
 
 {% block stylesheets %}
-  <style>
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
-      display:grid;
-      place-items:center;
-      overflow:hidden;
-      color:#fff;
-      font-family:"Trebuchet MS","Segoe UI","Verdana",sans-serif;
-      background:linear-gradient(135deg,#6f39d7 0%,#ff6c61 100%);
-      position:relative;
+<style>
+    :root {
+        --neon-cyan: #00f3ff;
+        --neon-purple: #bc13fe;
+        --bg-dark: #070b14;
+        --error-red: #ff3131;
     }
-    .blur{
-      position:absolute;
-      border-radius:50%;
-      filter:blur(48px);
-      opacity:.5;
-      pointer-events:none;
+
+    body {
+        margin: 0;
+        background: var(--bg-dark);
+        overflow: hidden;
+        font-family: "Trebuchet MS", sans-serif;
     }
-    .blur.a{width:260px;height:260px;background:#ffd86b;top:-40px;left:-20px}
-    .blur.b{width:220px;height:220px;background:#ffffff;bottom:-60px;right:-30px;opacity:.28}
-    .wrap{width:min(92vw,420px);position:relative;z-index:2}
-    .brand{text-align:center;margin-bottom:14px}
-    .brand h1{margin:0;font-size:30px}
-    .brand p{margin:4px 0 0;color:#f8e9ff}
-    .card{
-      background:#fff;
-      color:#1e1e2e;
-      border-radius:16px;
-      padding:22px;
-      box-shadow:0 16px 40px rgba(19,11,36,.32);
+
+    /* --- FIXED NAV BAR (MATCHING SIGN UP) --- */
+    .fixed-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px 40px;
+        background: rgba(10, 15, 28, 0.8);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 100;
     }
-    label{display:block;font-weight:700;font-size:13px;margin-bottom:5px}
-    input{
-      width:100%;
-      padding:11px;
-      border-radius:10px;
-      border:1px solid #d8ddf3;
-      margin-bottom:12px;
-      font-size:14px;
+
+    .nav-logo {
+        color: var(--neon-cyan);
+        font-weight: 900;
+        letter-spacing: 2px;
+        text-decoration: none;
+        font-size: 1.2rem;
+        text-shadow: 0 0 10px var(--neon-cyan);
     }
-    .signin{
-      width:100%;
-      border:none;
-      border-radius:10px;
-      padding:12px;
-      font-weight:800;
-      background:#ffd23c;
-      color:#2f2300;
-      cursor:pointer;
+
+    .nav-status {
+        color: var(--neon-cyan);
+        font-size: 10px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
-    .quick{
-      margin-top:12px;
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:8px;
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--neon-cyan);
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--neon-cyan);
+        animation: pulse 2s infinite;
     }
-    .quick a{
-      text-decoration:none;
-      text-align:center;
-      background:#f4f6ff;
-      border:1px solid #dde2f8;
-      border-radius:10px;
-      padding:9px 6px;
-      color:#1f2d56;
-      font-weight:700;
-      font-size:13px;
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
     }
-    .note{font-size:12px;color:#5d6180;margin-top:10px;text-align:center}
-  </style>
+
+    /* --- THE NEURAL CARD --- */
+    .auth-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 40px 40px 40px;
+        position: relative;
+        z-index: 5;
+    }
+
+    .auth-card {
+        width: 100%;
+        max-width: 500px; 
+        background: rgba(10, 15, 28, 0.9);
+        border-radius: 20px;
+        padding: 40px;
+        position: relative;
+        overflow: hidden; 
+        backdrop-filter: blur(20px);
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+        {% if error %} border: 1px solid var(--error-red); box-shadow: 0 0 30px rgba(255, 49, 49, 0.2); {% endif %}
+    }
+
+    .auth-card::before {
+        content: '';
+        position: absolute;
+        top: -50%; left: -50%;
+        width: 200%; height: 200%;
+        background: conic-gradient(transparent, var(--neon-cyan), var(--neon-purple), transparent 30%);
+        animation: rotate-border 4s linear infinite;
+        z-index: -2;
+    }
+
+    .auth-card::after {
+        content: '';
+        position: absolute;
+        inset: 3px;
+        background: rgba(10, 15, 28, 0.95);
+        border-radius: 17px;
+        z-index: -1;
+    }
+
+    @keyframes rotate-border { 100% { transform: rotate(360deg); } }
+
+    /* --- MECHANICAL EYES --- */
+    .eye-scanner {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 25px;
+    }
+
+    .cyber-eye {
+        width: 60px;
+        height: 60px;
+        background: #000;
+        border: 2px solid var(--neon-purple);
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .pupil {
+        width: 20px;
+        height: 20px;
+        background: var(--neon-cyan);
+        border-radius: 50%;
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 15px var(--neon-cyan);
+        transition: transform 0.1s ease-out;
+    }
+
+    .eye-lid {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: var(--bg-dark);
+        border-bottom: 2px solid var(--neon-cyan);
+        top: -100%; 
+        z-index: 10;
+        transition: top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .is-closed .eye-lid { top: 0; }
+
+    /* --- FORM STYLING --- */
+    .form-group { margin-bottom: 20px; position: relative; }
+
+    label {
+        color: var(--neon-cyan);
+        text-transform: uppercase;
+        font-size: 10px;
+        letter-spacing: 2px;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    input:not([type="checkbox"]) {
+        width: 100%;
+        background: rgba(0,0,0,0.5);
+        border: 1px solid rgba(0,243,255,0.2);
+        border-radius: 10px;
+        padding: 14px;
+        color: white;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    input:focus {
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+    }
+
+    .mini-eye-toggle {
+        position: absolute;
+        right: 15px;
+        top: 38px;
+        width: 22px;
+        height: 12px;
+        border: 1px solid var(--neon-cyan);
+        border-radius: 50% 0 50% 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mini-pupil { width: 5px; height: 5px; background: var(--neon-cyan); border-radius: 50%; }
+
+    .signin-btn {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+        border: none;
+        border-radius: 12px;
+        color: black;
+        font-weight: 900;
+        text-transform: uppercase;
+        cursor: pointer;
+        box-shadow: 0 0 20px var(--neon-cyan);
+        margin-top: 10px;
+    }
+
+    /* --- ROBOTCHECK CHECKBOX --- */
+    .robot-check-container {
+        background: rgba(255,255,255,0.05); 
+        padding: 15px; 
+        border-radius: 10px; 
+        border: 1px dashed var(--neon-cyan);
+        margin-bottom: 20px;
+    }
+
+    .robot-check-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        margin-bottom: 0;
+        color: white;
+        text-transform: none;
+        font-size: 13px;
+    }
+
+    /* --- FLOATING ASSETS --- */
+    .floating-container {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        z-index: 0; pointer-events: none;
+    }
+    
+    .icon-box { 
+        position: absolute; width: 160px; height: 160px; 
+        display: flex; align-items: center; justify-content: center;
+        animation: float-y 6s ease-in-out infinite;
+    }
+
+    .ring {
+        position: absolute; border-radius: 50%; border: 2px solid transparent;
+        width: 140px; height: 70px; transform: rotateX(75deg);
+        animation: rotate-ring 4s linear infinite;
+    }
+
+    .cyber-logo { font-size: 50px; filter: drop-shadow(0 0 15px currentColor); }
+
+    @keyframes float-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
+    @keyframes rotate-ring { from { transform: rotateX(75deg) rotateZ(0deg); } to { transform: rotateX(75deg) rotateZ(360deg); } }
+</style>
 {% endblock %}
 
 {% block body %}
-  <div class="blur a"></div>
-  <div class="blur b"></div>
-
-  <div class="wrap">
-    <div class="brand">
-      <h1>StudyCompanionPlus</h1>
-      <p>Learn with AI. Track progress. Improve faster.</p>
+<nav class="fixed-nav">
+    <a href="/" class="nav-logo">STUDYCOMPANION+</a>
+    <div class="nav-status">
+        <div class="status-dot"></div>
+        SYSTEM_STATUS: ONLINE
     </div>
+</nav>
 
-    <div class="card">
-      <form method="post">
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" required>
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" required>
-        <button class="signin" type="submit">Sign In</button>
-      </form>
+<canvas id="neural-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.3;"></canvas>
 
-      <div class="quick">
-        <a href="{{ path('app_quick_login', {'role': 'admin'}) }}">Admin</a>
-        <a href="{{ path('app_quick_login', {'role': 'teacher'}) }}">Teacher</a>
-        <a href="{{ path('app_quick_login', {'role': 'student'}) }}">Student</a>
-      </div>
-
-      <p class="note">Account creation is handled by an administrator.</p>
+<div class="floating-container">
+    <div class="icon-box" style="top: 10%; left: 8%;">
+        <div class="ring" style="border-top:2px solid var(--neon-cyan); border-bottom:2px solid var(--neon-cyan);"></div>
+        <span class="cyber-logo" style="color: var(--neon-cyan);">🧠</span>
     </div>
-  </div>
+    <div class="icon-box" style="top: 15%; right: 10%; animation-delay: -1s;">
+        <div class="ring" style="border-left:2px solid var(--neon-purple); border-right:2px solid var(--neon-purple);"></div>
+        <span class="cyber-logo" style="color: var(--neon-purple);">📖</span>
+    </div>
+    <div class="icon-box" style="bottom: 15%; left: 10%; animation-delay: -2s;">
+        <div class="ring" style="border-top:2px solid var(--neon-purple); border-bottom:2px solid var(--neon-purple); animation-direction: reverse;"></div>
+        <span class="cyber-logo" style="color: var(--neon-purple);">🎓</span>
+    </div>
+    <div class="icon-box" style="bottom: 10%; right: 8%; animation-delay: -3s;">
+        <div class="ring" style="border-left:2px solid var(--neon-cyan); border-right:2px solid var(--neon-cyan);"></div>
+        <span class="cyber-logo" style="color: var(--neon-cyan);">⚛️</span>
+    </div>
+</div>
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h1 style="text-align: center; color: white; letter-spacing: 5px; margin: 0 0 5px 0; font-size: 24px;">ACCESS GRANTED</h1>
+        <p style="text-align:center; color: #8892b0; margin-bottom: 25px; font-size: 10px;">[ TERMINAL LOGIN V2.0 ]</p>
+
+        <div class="eye-scanner" id="eye-scanner">
+            <div class="cyber-eye"><div class="eye-lid"></div><div class="pupil"></div></div>
+            <div class="cyber-eye"><div class="eye-lid"></div><div class="pupil"></div></div>
+        </div>
+
+        {% if error %}
+            <div style="background: rgba(255, 49, 49, 0.1); color: var(--error-red); padding: 12px; border-radius: 10px; border: 1px solid var(--error-red); font-size: 12px; margin-bottom: 20px; text-align: center;">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        <form method="post">
+            <div class="form-group">
+                <label for="email">Neural ID (Email)</label>
+                <input type="email" name="email" id="email" value="{{ last_username }}" required autofocus placeholder="id@network.com">
+            </div>
+
+            <div class="form-group" id="pass-container">
+                <label for="password">Access Key (Password)</label>
+                <input type="password" name="password" id="password" required placeholder="••••••••" onfocus="lockEyes()" onblur="unlockIfHidden()">
+                <div class="mini-eye-toggle" onclick="toggleNeuralPass()">
+                    <div class="mini-pupil"></div>
+                </div>
+            </div>
+
+            <div class="robot-check-container">
+                <label class="robot-check-label">
+                    <input type="checkbox" required style="width:18px; height:18px; accent-color: var(--neon-cyan); cursor: pointer;">
+                    <span>ROBOTCHECK: Human user verified</span>
+                </label>
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button class="signin-btn" type="submit">Establish Link</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 20px; font-size: 11px; color: #5d6180;">
+            No access? <a href="{{ path('app_register') }}" style="color: var(--neon-cyan); text-decoration: none;"><b>Initialize Profile</b></a>
+        </p>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('neural-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const drops = Array(Math.floor(canvas.width / 16)).fill(1);
+    function draw() {
+        ctx.fillStyle = "rgba(7, 11, 20, 0.1)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#00f3ff"; 
+        ctx.font = "16px monospace";
+        drops.forEach((y, i) => {
+            ctx.fillText(Math.floor(Math.random()*2), i * 16, y * 16);
+            if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        });
+    }
+    setInterval(draw, 33);
+
+    const pupils = document.querySelectorAll('.pupil');
+    const scanner = document.getElementById('eye-scanner');
+    const passInput = document.getElementById('password');
+    const passContainer = document.getElementById('pass-container');
+    let locked = false;
+
+    document.addEventListener('mousemove', (e) => {
+        if (locked) return;
+        pupils.forEach(pupil => {
+            const rect = pupil.getBoundingClientRect();
+            const eyeX = rect.left + rect.width / 2;
+            const eyeY = rect.top + rect.height / 2;
+            const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
+            const distance = Math.min(12, Math.hypot(e.clientX - eyeX, e.clientY - eyeY) / 10);
+            const x = Math.cos(angle) * distance;
+            const y = Math.sin(angle) * distance;
+            pupil.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+        });
+    });
+
+    function lockEyes() {
+        if (!passContainer.classList.contains('eye-visible')) {
+            locked = true;
+            scanner.classList.add('is-closed');
+        }
+    }
+
+    function unlockIfHidden() {
+        if (!passContainer.classList.contains('eye-visible')) {
+            locked = false;
+            scanner.classList.remove('is-closed');
+        }
+    }
+
+    function toggleNeuralPass() {
+        const isSecret = passInput.type === "password";
+        passInput.type = isSecret ? "text" : "password";
+        if (isSecret) {
+            passContainer.classList.add('eye-visible');
+            locked = false;
+            scanner.classList.remove('is-closed');
+        } else {
+            passContainer.classList.remove('eye-visible');
+            if (document.activeElement === passInput) lockEyes();
+        }
+    }
+</script>
 {% endblock %}
