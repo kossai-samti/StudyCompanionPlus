@@ -1,37 +1,158 @@
-{% extends 'front/base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Student Lessons{% endblock %}
+{% block title %}Neural Registry | Lessons{% endblock %}
 
-{% block content %}
-  {% set viewer = app.session.get('demo_user')|default({'role': 'student'}) %}
-  {% set role = viewer.role|default('student') %}
-  <header class="page-card" style="display:flex;justify-content:space-between;gap:10px;align-items:center">
-    <div>
-      <h1 style="margin:0">Lessons</h1>
-      <p style="margin:6px 0 0;color:#5e5091">Review all available lessons and open details to study.</p>
-    </div>
-    {% if role in ['teacher', 'student'] %}
-      {% if role == 'student' %}
-        <a href="{{ path('student_lesson_upload') }}" style="text-decoration:none;background:#6c45db;color:#fff;padding:10px 12px;border-radius:10px;font-weight:700">Upload to AI</a>
-      {% else %}
-        <a href="{{ path('teacher_lesson_create_ai') }}" style="text-decoration:none;background:#6c45db;color:#fff;padding:10px 12px;border-radius:10px;font-weight:700">Teacher Create</a>
-      {% endif %}
-    {% endif %}
-  </header>
+{% block stylesheets %}
+<style>
+    :root {
+        --glass: rgba(10, 15, 28, 0.9);
+        --neon-cyan: #00f3ff;
+        --neon-purple: #bc13fe;
+        --border: rgba(255, 255, 255, 0.08);
+    }
 
-  <section class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:14px">
-    {% for l in lessons %}
-      <article class="page-card">
-        <h3 style="margin-top:0">{{ l.title }}</h3>
-        <p style="margin:8px 0"><strong>Subject:</strong> {{ l.subject }}</p>
-        <p style="margin:8px 0"><strong>Difficulty:</strong> {{ l.difficulty }}</p>
-        {% if l.difficulty == 'easy' %}
-          <span style="display:inline-block;background:#ecfff0;border:1px solid #bfeccc;color:#175a2d;padding:5px 8px;border-radius:999px;font-size:12px">Mastery badge</span>
+    body {
+        background: radial-gradient(circle at center, #111827 0%, #030712 100%) !important;
+        color: #e2e8f0;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .neural-container { max-width: 1400px; margin: 120px auto; padding: 0 40px; }
+
+    /* Top Bar */
+    .registry-header {
+        background: var(--glass);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--neon-cyan);
+        padding: 30px;
+        border-radius: 16px;
+        margin-bottom: 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        backdrop-filter: blur(10px);
+    }
+
+    /* Grid Layout */
+    .neural-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 30px;
+    }
+
+    /* Lesson Card */
+    .lesson-module {
+        background: var(--glass);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 25px;
+        transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .lesson-module:hover {
+        transform: translateY(-8px);
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 25px rgba(0, 243, 255, 0.15);
+    }
+
+    /* Role Indicators */
+    .role-indicator {
+        font-family: 'Monaco', monospace;
+        font-size: 10px;
+        letter-spacing: 2px;
+        padding: 4px 10px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+        display: inline-block;
+    }
+
+    .role-teacher { background: rgba(188, 19, 254, 0.15); color: var(--neon-purple); border: 1px solid var(--neon-purple); }
+    .role-student { background: rgba(0, 243, 255, 0.15); color: var(--neon-cyan); border: 1px solid var(--neon-cyan); }
+
+    .btn-action {
+        background: linear-gradient(135deg, var(--neon-purple) 0%, #7e22ce 100%);
+        color: white;
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 14px;
+        transition: 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-action:hover { box-shadow: 0 0 20px var(--neon-purple); transform: scale(1.02); }
+
+    .summary-preview {
+        color: #94a3b8;
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 15px 0;
+        height: 60px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="neural-container">
+    <header class="registry-header">
+        <div>
+            <h1 style="margin:0; font-size: 28px; letter-spacing: -1px;">CORE_<span style="color:var(--neon-cyan)">LESSON</span>_REGISTRY</h1>
+            <p style="color: #64748b; font-family: monospace; font-size: 12px; margin-top: 8px;">[ STATUS ]: LINKED_TO_STUDY_COMPANION_V2</p>
+        </div>
+
+        {% if viewer_role == 'student' %}
+            <a href="{{ path('student_lesson_upload') }}" class="btn-action">INITIALIZE_AI_UPLINK</a>
+        {% elseif viewer_role == 'teacher' %}
+            <a href="{{ path('teacher_lesson_create_ai') }}" class="btn-action">DEPLOY_TEACHER_MODULE</a>
         {% endif %}
-        <p style="margin:14px 0 0"><a href="{{ path('lesson_show', {'id': l.id}) }}" style="text-decoration:none;color:#6b44db;font-weight:700">Open Lesson</a></p>
-      </article>
-    {% else %}
-      <article class="page-card"><p style="margin:0">No lessons yet.</p></article>
-    {% endfor %}
-  </section>
+    </header>
+
+    <div class="neural-grid">
+        {% for l in lessons %}
+            <div class="lesson-module">
+                <span class="role-indicator role-{{ l.createdByRole|default('student') }}">
+                    {{ l.createdByRole|default('USER') }}
+                </span>
+                
+                <h3 style="margin: 10px 0; font-size: 20px;">{{ l.title }}</h3>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <span style="font-size: 11px; color: var(--neon-cyan);">#{{ l.subject }}</span>
+                    <span style="font-size: 11px; color: #64748b;">// {{ l.difficulty|upper }}</span>
+                </div>
+
+                <div class="summary-preview">
+                    {% if l.studyMaterials|length > 0 %}
+                        {{ l.studyMaterials.first.summary|default('Decrypting lesson metadata...') }}
+                    {% else %}
+                        No study data currently synced for this module.
+                    {% endif %}
+                </div>
+
+                <div style="border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                    <a href="{{ path('lesson_show', {'id': l.id}) }}" style="color: var(--neon-cyan); text-decoration: none; font-size: 13px; font-weight: bold; font-family: monospace;">
+                        [ ACCESS_MODULE ]
+                    </a>
+                    
+                    {% if l.difficulty == 'easy' %}
+                        <span style="color: #10b981; font-size: 10px;">MASTERY_AVAILABLE</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div style="grid-column: 1/-1; text-align: center; padding: 60px; border: 1px dashed var(--border); border-radius: 20px;">
+                <p style="color: #64748b; font-family: monospace;">CRITICAL: NO_LESSONS_FOUND_IN_SECTOR</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

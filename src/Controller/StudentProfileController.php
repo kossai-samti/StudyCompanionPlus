@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Lesson; 
-use App\Entity\Quiz;   
+use App\Entity\Lesson;
+use App\Entity\Quiz;
+use App\Entity\StudentProfile;
 use App\Repository\StudentProfileRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +20,7 @@ final class StudentProfileController extends AbstractController
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
         
-        // Fetching real data
+        // Fetch real data from your entities
         $recentLessons = $em->getRepository(Lesson::class)->findBy([], ['id' => 'DESC'], 3);
         $availableQuizzes = $em->getRepository(Quiz::class)->findBy([], ['id' => 'DESC'], 2);
 
@@ -28,7 +29,7 @@ final class StudentProfileController extends AbstractController
             'lessons' => $recentLessons,
             'quizzes' => $availableQuizzes,
             'core_id' => '#' . str_pad($user->getId() ?? 0, 4, '0', STR_PAD_LEFT),
-            'total_lessons_count' => count($recentLessons), 
+            'total_lessons_count' => count($recentLessons),
             'avg_score' => '84%',
             'mastered_count' => 6
         ]);
@@ -39,6 +40,7 @@ final class StudentProfileController extends AbstractController
     {
         return $this->render('student_profile/index.html.twig', [
             'student_profiles' => $studentProfileRepository->findAll(),
+            'user' => $this->getUser(),
         ]);
     }
 }

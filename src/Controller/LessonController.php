@@ -16,20 +16,27 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/lesson')]
 final class LessonController extends AbstractController
 {
+    /**
+     * Updated Index logic: Filters view based on the session role.
+     */
     #[Route('/', name: 'lesson_index', methods: ['GET'])]
     public function index(LessonRepository $repo, SessionInterface $session): Response
     {
         $viewer = $session->get('demo_user', ['name' => 'Student', 'role' => 'student']);
         $role = strtolower((string) ($viewer['role'] ?? 'student'));
-        $allLessons = $repo->findAll();
-
+        
+        // Per your logic: Teachers only see teacher-created lessons.
+        // Students and Admins see all available modules.
         if ($role === 'teacher') {
-            $allLessons = array_values(array_filter($allLessons, static fn (Lesson $lesson): bool =>
-                strtolower((string) $lesson->getCreatedByRole()) === 'teacher'
-            ));
+            $lessons = $repo->findBy(['created_by_role' => 'teacher']);
+        } else {
+            $lessons = $repo->findAll();
         }
 
-        return $this->render('lesson/index.html.twig', ['lessons' => $allLessons]);
+        return $this->render('lesson/index.html.twig', [
+            'lessons' => $lessons,
+            'viewer_role' => $role
+        ]);
     }
 
     #[Route('/new', name: 'lesson_new', methods: ['GET','POST'])]
@@ -37,9 +44,10 @@ final class LessonController extends AbstractController
     {
         $viewer = $session->get('demo_user', ['name' => 'Student', 'role' => 'student']);
         $role = strtolower((string) ($viewer['role'] ?? 'student'));
+        
         if ($role === 'admin') {
-            $this->addFlash('error', 'Admin cannot create lessons. Only teachers and students can.');
-            return $this->redirectToRoute('admin_lessons');
+            $this->addFlash('error', 'Admin cannot create lessons directly.');
+            return $this->redirectToRoute('lesson_index');
         }
 
         $lesson = new Lesson();
@@ -57,8 +65,9 @@ final class LessonController extends AbstractController
             }
 
             $lesson->setCreatedByRole($role);
-            $lesson->setCreatedByName((string) ($viewer['name'] ?? 'Unknown'));
+            $lesson->setCreatedByName((string) ($viewer['name'] ?? 'Unknown User'));
             $lesson->setCreatedAt(new \DateTimeImmutable());
+            
             $em->persist($lesson);
             $em->flush();
 
@@ -73,16 +82,15 @@ final class LessonController extends AbstractController
     {
         $material = $lesson->getStudyMaterials()->first();
         $flashcards = [];
-        if ($material !== false && $material !== null && $material->getFlashcards() !== null) {
+        
+        if ($material && $material->getFlashcards()) {
             $decoded = json_decode((string) $material->getFlashcards(), true);
-            if (is_array($decoded)) {
-                $flashcards = $decoded;
-            }
+            $flashcards = is_array($decoded) ? $decoded : [];
         }
 
         return $this->render('lesson/show.html.twig', [
             'lesson' => $lesson,
-            'material' => $material !== false ? $material : null,
+            'material' => $material ?: null,
             'flashcards' => $flashcards,
         ]);
     }
@@ -90,21 +98,19 @@ final class LessonController extends AbstractController
     #[Route('/{id}/edit', name: 'lesson_edit', methods: ['GET','POST'])]
     public function edit(Request $request, Lesson $lesson, EntityManagerInterface $em, SessionInterface $session): Response
     {
-        $viewer = $session->get('demo_user', ['name' => 'Student', 'role' => 'student']);
+        $viewer = $session->get('demo_user', ['role' => 'student']);
         $role = strtolower((string) ($viewer['role'] ?? 'student'));
 
         if ($role === 'admin') {
-            $this->addFlash('error', 'Admin cannot edit lessons from this screen.');
-            return $this->redirectToRoute('admin_lessons');
+            $this->addFlash('error', 'Admin restricted access.');
+            return $this->redirectToRoute('lesson_index');
         }
 
         $form = $this->createForm(LessonType::class, $lesson, ['is_teacher' => $role === 'teacher']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($role === 'student') {
-                $lesson->setTargetGroup(null);
-            }
+            if ($role === 'student') { $lesson->setTargetGroup(null); }
             $em->flush();
             return $this->redirectToRoute('lesson_index');
         }
@@ -114,30 +120,33 @@ final class LessonController extends AbstractController
 
     #[Route('/{id}', name: 'lesson_delete', methods: ['POST'])]
     public function delete(
-        Request $request,
-        Lesson $lesson,
-        EntityManagerInterface $em,
+        Request $request, 
+        Lesson $lesson, 
+        EntityManagerInterface $em, 
         SessionInterface $session,
         QuizRepository $quizRepository
-    ): Response
-    {
-        $viewer = $session->get('demo_user', ['name' => 'Student', 'role' => 'student']);
+    ): Response {
+        $viewer = $session->get('demo_user', ['role' => 'student']);
         $role = strtolower((string) ($viewer['role'] ?? 'student'));
 
         if ($this->isCsrfTokenValid('delete'.$lesson->getId(), $request->request->get('_token'))) {
-            if (!in_array($role, ['teacher', 'admin'], true)) {
-                return $this->redirectToRoute('lesson_index');
-            }
-
-            foreach ($quizRepository->findBy(['lesson' => $lesson]) as $quiz) {
-                foreach ($quiz->getQuestions() as $question) {
-                    $em->remove($question);
+            // Permission check: Only Teachers/Admins can delete, or a student deleting their own.
+            if (in_array($role, ['teacher', 'admin'], true) || ($role === 'student' && $lesson->getCreatedByName() === $viewer['name'])) {
+                
+                // Manual cascade delete for linked quizzes and questions
+                foreach ($quizRepository->findBy(['lesson' => $lesson]) as $quiz) {
+                    foreach ($quiz->getQuestions() as $question) {
+                        $em->remove($question);
+                    }
+                    $em->remove($quiz);
                 }
-                $em->remove($quiz);
+                
+                $em->remove($lesson);
+                $em->flush();
+                $this->addFlash('success', 'Neural module purged.');
             }
-            $em->remove($lesson);
-            $em->flush();
         }
+        
         return $this->redirectToRoute($role === 'admin' ? 'admin_lessons' : 'lesson_index');
     }
 }

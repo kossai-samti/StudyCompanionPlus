@@ -1,35 +1,133 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}StudentProfile index{% endblock %}
+{% block title %}Neural Link | Profile Registry{% endblock %}
+
+{% block stylesheets %}
+<style>
+    :root {
+        --glass: rgba(15, 23, 42, 0.9);
+        --neon-cyan: #00f3ff;
+        --neon-purple: #bc13fe;
+        --bg-deep: #070b14;
+        --text-dim: #94a3b8;
+    }
+
+    body {
+        background: radial-gradient(circle at center, #1e1b4b 0%, var(--bg-deep) 100%) !important;
+        color: #f8fafc;
+        font-family: 'Trebuchet MS', sans-serif;
+        margin: 0;
+    }
+
+    .container { max-width: 1200px; margin: 120px auto; padding: 0 20px; }
+
+    .cyber-header {
+        border-left: 4px solid var(--neon-cyan);
+        background: var(--glass);
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 40px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
+    }
+
+    .profile-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+    }
+
+    .profile-card {
+        background: var(--glass);
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 20px;
+        padding: 25px;
+        transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-left: 4px solid var(--neon-purple);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .profile-card:hover {
+        transform: translateY(-10px);
+        border-left-color: var(--neon-cyan);
+        box-shadow: 0 10px 30px rgba(0, 243, 255, 0.15);
+    }
+
+    .status-tag {
+        font-family: monospace;
+        font-size: 10px;
+        padding: 4px 8px;
+        background: rgba(188, 19, 254, 0.2);
+        color: var(--neon-purple);
+        border-radius: 4px;
+        text-transform: uppercase;
+    }
+
+    .btn-back {
+        display: inline-block;
+        margin-top: 40px;
+        color: var(--neon-cyan);
+        text-decoration: none;
+        font-family: monospace;
+        letter-spacing: 2px;
+        border: 1px solid var(--neon-cyan);
+        padding: 12px 25px;
+        border-radius: 5px;
+        transition: 0.3s;
+        background: transparent;
+    }
+
+    .btn-back:hover {
+        background: var(--neon-cyan);
+        color: #000;
+        box-shadow: 0 0 20px var(--neon-cyan);
+    }
+</style>
+{% endblock %}
 
 {% block body %}
-    <h1>StudentProfile index</h1>
+<div class="container">
+    <div class="cyber-header">
+        <h1 style="margin:0; font-size: 2.2rem; font-weight: 900; letter-spacing: -1px;">
+            NEURAL_<span style="color:var(--neon-cyan)">PROFILE</span>_REGISTRY
+        </h1>
+        <p style="color: var(--text-dim); font-family: monospace; margin-top: 10px;">
+            [ SYSTEM ] : UPLOADING ACTIVE STUDENT MATRICES...
+        </p>
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Grade</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for student_profile in student_profiles %}
-            <tr>
-                <td>{{ student_profile.id }}</td>
-                <td>{{ student_profile.grade }}</td>
-                <td>
-                    <a href="{{ path('app_student_profile_show', {'id': student_profile.id}) }}">show</a>
-                    <a href="{{ path('app_student_profile_edit', {'id': student_profile.id}) }}">edit</a>
-                </td>
-            </tr>
+    <div class="profile-grid">
+        {% for profile in student_profiles %}
+            <div class="profile-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                    <span class="status-tag">Grade: {{ profile.grade }}</span>
+                    <span style="color: var(--neon-cyan); font-family: monospace; font-size: 12px;">#{{ profile.id }}</span>
+                </div>
+                
+                <h3 style="margin: 10px 0; font-size: 1.4rem;">
+                    {{ profile.user.firstName }} {{ profile.user.lastName }}
+                </h3>
+                
+                <p style="color: var(--text-dim); font-size: 13px; line-height: 1.5;">
+                    Linked to Group: <span style="color: #fff;">{{ profile.studentGroup ? profile.studentGroup.name : 'UNASSIGNED' }}</span><br>
+                    Cortex uplink established via {{ profile.user.email }}
+                </p>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.05); margin-top: 20px; padding-top: 15px; display: flex; justify-content: space-between;">
+                    <a href="#" style="color: var(--neon-purple); text-decoration: none; font-family: monospace; font-size: 11px; font-weight: bold;">
+                        [ VIEW_ANALYTICS ]
+                    </a>
+                    <span style="color: var(--text-dim); font-size: 10px; font-family: monospace;">STABLE_LINK</span>
+                </div>
+            </div>
         {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
+            <div style="grid-column: 1/-1; text-align: center; padding: 50px; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px dashed rgba(255,255,255,0.1);">
+                <p style="color: var(--neon-red); font-family: monospace;">CRITICAL_ERROR: NO_STUDENT_DATA_FOUND</p>
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
+    </div>
 
-    <a href="{{ path('app_student_profile_new') }}">Create new</a>
+    <a href="{{ path('student_dashboard') }}" class="btn-back"> < RETURN_TO_CORE_DASHBOARD</a>
+</div>
 {% endblock %}

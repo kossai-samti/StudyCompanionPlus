@@ -1,166 +1,99 @@
-{% extends 'base.html.twig' %}
+{# templates/back/base.html.twig #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NEURAL_COMPANION+ // FACULTY</title>
+    <style>
+        :root {
+            --bg: #030712;
+            --panel-bg: rgba(17, 24, 39, 0.7);
+            --cyan: #22d3ee;
+            --purple: #a855f7;
+            --pink: #ec4899;
+            --border: rgba(255, 255, 255, 0.1);
+        }
 
-{% block body_class %}back-shell{% endblock %}
+        body {
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(34, 211, 238, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.08) 0%, transparent 40%);
+            color: #f8fafc;
+            font-family: 'Inter', system-ui, sans-serif;
+            margin: 0; min-height: 100vh;
+        }
 
-{% block stylesheets %}
-  <style>
-    :root{
-      --navy-950:#030b1b;
-      --navy-900:#081834;
-      --navy-800:#0f2a4f;
-      --text:#e7f1ff;
-      --muted:#adc3e7;
-      --gold:#ffd86b;
-      --line:rgba(197,218,255,.18);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      color:var(--text);
-      font-family:"Trebuchet MS","Segoe UI","Verdana",sans-serif;
-      background:
-        radial-gradient(circle at 12% -4%, #1a3767 0, transparent 38%),
-        radial-gradient(circle at 95% 12%, #13325f 0, transparent 34%),
-        linear-gradient(180deg,var(--navy-900),var(--navy-950));
-      min-height:100vh;
-    }
-    a{color:inherit}
-    .back-nav{
-      position:sticky;
-      top:0;
-      z-index:20;
-      margin:14px;
-      padding:12px 16px;
-      background:rgba(8,24,52,.8);
-      border:1px solid var(--line);
-      border-radius:16px;
-      backdrop-filter:blur(8px);
-      display:flex;
-      gap:14px;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .brand{
-      text-decoration:none;
-      color:var(--gold);
-      font-weight:800;
-    }
-    .badge{
-      display:inline-block;
-      border-radius:999px;
-      border:1px solid rgba(255,216,107,.4);
-      padding:4px 8px;
-      margin-left:8px;
-      font-size:12px;
-      color:#fff4d0;
-      background:rgba(255,216,107,.15);
-    }
-    .links{display:flex;gap:6px;flex-wrap:wrap}
-    .links a{
-      text-decoration:none;
-      color:var(--muted);
-      padding:8px 11px;
-      border-radius:10px;
-      font-size:14px;
-    }
-    .links a.active{
-      background:#1d3f73;
-      color:#fff;
-      border:1px solid rgba(255,255,255,.15);
-    }
-    .menu{
-      background:rgba(255,255,255,.06);
-      border:1px solid var(--line);
-      border-radius:10px;
-      padding:8px 10px;
-      font-size:13px;
-      color:#fff;
-    }
-    .menu summary{cursor:pointer;list-style:none}
-    .menu summary::-webkit-details-marker{display:none}
-    .menu a{
-      text-decoration:none;
-      display:block;
-      margin-top:8px;
-      color:#fff;
-      font-weight:700;
-    }
-    .container{max-width:1160px;margin:0 auto;padding:0 18px 30px}
-    .panel{
-      background:rgba(8,31,59,.72);
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:16px;
-      box-shadow:0 12px 24px rgba(0,0,0,.2);
-    }
-    .grid{display:grid;gap:12px}
-    .action{
-      display:inline-block;
-      text-decoration:none;
-      background:#1b406f;
-      color:#fff;
-      border:1px solid rgba(255,255,255,.2);
-      border-radius:10px;
-      padding:9px 12px;
-      font-weight:700;
-      margin-right:8px;
-      margin-bottom:8px;
-    }
-    .action.gold{
-      background:var(--gold);
-      color:#2f2200;
-      border:none;
-    }
-    @media (max-width: 920px){
-      .back-nav{flex-direction:column;align-items:flex-start}
-      .container{padding:0 14px 26px}
-    }
-  </style>
-{% endblock %}
+        /* Moving RGB Line under Navbar */
+        .neon-pulse-line {
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), var(--pink), transparent);
+            background-size: 200% 100%;
+            animation: pulseMove 3s linear infinite;
+        }
 
-{% block body %}
-  {% set route = app.request.attributes.get('_route') %}
-  {% set user = app.session.get('demo_user')|default({'name': 'User'}) %}
-  {% set panel = panel|default('teacher') %}
+        @keyframes pulseMove {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
 
-  <nav class="back-nav">
-    <div>
-      <a href="{{ panel == 'admin' ? path('admin_dashboard') : path('teacher_dashboard') }}" class="brand">
-        StudyCompanionPlus
-      </a>
-      <span class="badge">{{ panel == 'admin' ? 'Admin' : 'Teacher' }}</span>
-    </div>
+        .back-nav {
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
 
-    <div class="links">
-      {% if panel == 'admin' %}
-        <a href="{{ path('admin_dashboard') }}" class="{{ route == 'admin_dashboard' ? 'active' : '' }}">Dashboard</a>
-        <a href="{{ path('admin_users') }}" class="{{ route == 'admin_users' ? 'active' : '' }}">Users</a>
-        <a href="{{ path('admin_groups') }}" class="{{ route == 'admin_groups' ? 'active' : '' }}">Groups</a>
-        <a href="{{ path('admin_lessons') }}" class="{{ route == 'admin_lessons' ? 'active' : '' }}">Lessons</a>
-        <a href="{{ path('admin_quizzes') }}" class="{{ route == 'admin_quizzes' ? 'active' : '' }}">Quizzes</a>
-      {% else %}
-        <a href="{{ path('teacher_dashboard') }}" class="{{ route == 'teacher_dashboard' ? 'active' : '' }}">Dashboard</a>
-        <a href="{{ path('teacher_students') }}" class="{{ route == 'teacher_students' ? 'active' : '' }}">Students</a>
-        <a href="{{ path('teacher_groups') }}" class="{{ route == 'teacher_groups' ? 'active' : '' }}">Groups</a>
-        <a href="{{ path('teacher_lessons') }}" class="{{ route == 'teacher_lessons' ? 'active' : '' }}">Lessons</a>
-        <a href="{{ path('teacher_quizzes') }}" class="{{ route == 'teacher_quizzes' ? 'active' : '' }}">Quizzes</a>
-      {% endif %}
-    </div>
+        .nav-group { display: flex; gap: 20px; align-items: center; }
 
-    <details class="menu">
-      <summary>{{ user.name|default('User') }}</summary>
-      <a href="{{ path('app_logout') }}">Logout</a>
-    </details>
-  </nav>
+        .nav-link {
+            color: #94a3b8; text-decoration: none; font-size: 0.8rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
+        }
 
-  <main class="container">
-    {% for label, messages in app.flashes %}
-      {% for message in messages %}
-        <div class="panel" style="margin-bottom:10px;border-left:4px solid {{ label == 'error' ? '#ff6b61' : '#ffd86b' }}">
-          {{ message }}
+        .nav-link:hover, .nav-link.active { color: var(--cyan); text-shadow: 0 0 8px var(--cyan); }
+
+        /* Terminal Logout Button */
+        .terminal-exit {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+            padding: 6px 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            text-decoration: none;
+            font-size: 0.75rem;
+            transition: 0.3s;
+        }
+
+        .terminal-exit:hover {
+            background: #ef4444; color: white; box-shadow: 0 0 15px #ef4444;
+        }
+
+        .main-container { padding: 40px; max-width: 1400px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <nav class="back-nav">
+        <div class="nav-group">
+            <span style="font-weight: 900; color: #fff; letter-spacing: -1px;">NEURAL_FACULTY+</span>
+            <div style="width: 1px; height: 20px; background: var(--border); margin: 0 10px;"></div>
+            <a href="{{ path('teacher_dashboard') }}" class="nav-link active">Core</a>
+            <a href="#" class="nav-link">Students</a>
+            <a href="{{ path('lesson_index') }}" class="nav-link">Lessons</a>
         </div>
-      {% endfor %}
-    {% endfor %}
-    {% block content %}{% endblock %}
-  </main>
-{% endblock %}
+
+        <div class="nav-group">
+            <span style="font-family: monospace; font-size: 0.75rem; color: var(--cyan);">{{ app.user.firstName }}@NC_SERVER</span>
+            <a href="{{ path('app_logout') }}" class="terminal-exit">[ DISCONNECT_SESSION ]</a>
+        </div>
+    </nav>
+    <div class="neon-pulse-line"></div>
+
+    <div class="main-container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

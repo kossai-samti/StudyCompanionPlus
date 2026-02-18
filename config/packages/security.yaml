@@ -24,6 +24,7 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+                # This points to the logic controller we built
                 default_target_path: app_login_redirect
                 
                 # Username/Password parameters
@@ -32,14 +33,27 @@ security:
             
             logout:
                 path: app_logout
-                # CHANGED THIS: Point this to your landing page route (usually 'home' or 'app_home')
+                # Ensure 'home' exists in your routes or change to 'app_login'
                 target: home 
 
+            # Added: Allows the session to be remembered
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+
     # 4. Role-based access
+    # RULES ARE CHECKED FROM TOP TO BOTTOM
     access_control:
+        # ALLOW access to the login page and public assets
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        
+        # ALLOW any authenticated user to hit the redirect logic
+        - { path: ^/login-redirect, roles: IS_AUTHENTICATED_FULLY }
+
+        # STRICT Role Enforcement
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/teacher, roles: ROLE_TEACHER }
-        - { path: ^/student, roles: ROLE_STUDENT }
+        - { path: ^/student, roles: [ROLE_STUDENT, ROLE_USER] }
 
 when@test:
     security:

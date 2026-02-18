@@ -14,6 +14,25 @@
         --nav-height: 80px;
     }
 
+    /* --- THE RGB NEON LINE CSS --- */
+    .rgb-neon-line {
+        height: 3px;
+        width: 100%;
+        background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), #ff00ff, var(--neon-cyan));
+        background-size: 300% 100%;
+        animation: plasma-flow 3s linear infinite;
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+        position: fixed;
+        top: var(--nav-height); /* Sticks it exactly under the navbar */
+        left: 0;
+        z-index: 2001; /* Above the nav border */
+    }
+
+    @keyframes plasma-flow {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 100% 50%; }
+    }
+
     body {
         background: radial-gradient(circle at center, #1e1b4b 0%, var(--bg-deep) 100%) !important;
         color: #f8fafc;
@@ -125,6 +144,8 @@
     </div>
     <a href="{{ path('app_logout') }}" class="btn-terminate">TERMINATE SESSION</a>
 </nav>
+
+<div class="rgb-neon-line"></div>
 
 <div class="container">
     <div class="glass-card hero-card">
